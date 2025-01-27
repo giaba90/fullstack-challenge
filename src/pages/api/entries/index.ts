@@ -1,4 +1,6 @@
-import prisma from "@/lib/prisma";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 export default async function handler(req, res) {
   if (req.method === "GET") {
@@ -10,11 +12,7 @@ export default async function handler(req, res) {
     } catch (error) {
       res.status(500).json({ error: "Errore nel recupero degli elementi" });
     }
-  } else {
-    res.setHeader("Allow", ["GET"]);
-    res.status(405).json({ error: `Metodo ${req.method} non consentito` });
-  }
-  if (req.method === "POST") {
+  } else if (req.method === "POST") {
     const {
       applicationHostname,
       timestamp,
@@ -47,5 +45,8 @@ export default async function handler(req, res) {
     } catch (error) {
       res.status(500).json({ error: "Errore nella creazione dell'elemento" });
     }
+  } else {
+    res.setHeader("Allow", ["GET", "POST"]);
+    res.status(405).json({ error: `Metodo ${req.method} non consentito` });
   }
 }
