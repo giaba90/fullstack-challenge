@@ -1,6 +1,19 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/prisma/client";
 
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  if (req.method === "POST") {
+    return createEntryDetail(req, res);
+  }
+  if (req.method === "GET") {
+    return getEntryDetails(req, res);
+  }
+  res.status(405).json({ error: "Metodo non consentito" });
+}
+
 export async function createEntryDetail(
   req: NextApiRequest,
   res: NextApiResponse
@@ -55,17 +68,4 @@ export async function getEntryDetails(
   } else {
     res.status(405).json({ error: "Metodo non consentito" });
   }
-}
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (req.method === "POST") {
-    return createEntryDetail(req, res);
-  }
-  if (req.method === "GET") {
-    return getEntryDetails(req, res);
-  }
-  res.status(405).json({ error: "Metodo non consentito" });
 }
