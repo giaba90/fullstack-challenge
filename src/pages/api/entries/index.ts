@@ -1,13 +1,13 @@
-import { PrismaClient } from "@prisma/client";
+import { NextApiRequest, NextApiResponse } from "next";
+import prisma from "@/app/prisma/client";
 
-const prisma = new PrismaClient();
-
-export default async function handler(req, res) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   if (req.method === "GET") {
     try {
-      const entries = await prisma.entry.findMany({
-        include: { tags: true }, // Include i tag associati
-      });
+      const entries = await prisma.entry.findMany();
       res.status(200).json(entries);
     } catch (error) {
       res.status(500).json({ error: "Errore nel recupero degli elementi" });
