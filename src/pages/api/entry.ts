@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/prisma/client";
 import { z } from "zod";
 
-// Definisci uno schema di validazione per i dati della richiesta
+// Validation schema
 const entrySchema = z.object({
   applicationHostname: z
     .string()
@@ -34,7 +34,7 @@ export async function getEntries(req: NextApiRequest, res: NextApiResponse) {
 
 export async function createEntry(req: NextApiRequest, res: NextApiResponse) {
   try {
-    // Valida i dati della richiesta
+    // Validation
     const result = entrySchema.safeParse(req.body);
     if (!result.success) {
       return res.status(400).json({ error: result.error.errors });

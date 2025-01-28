@@ -1,5 +1,24 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/prisma/client";
+import { z } from "zod";
+
+// Definisci uno schema di validazione per i dati della richiesta
+const entryDetailSchema = z.object({
+  user: z.string().nonempty("Il campo user è obbligatorio"),
+  country: z.string().nonempty("Il campo country è obbligatorio"),
+  ip: z.string().nonempty("Il campo ip è obbligatorio"),
+  device: z.string().nonempty("Il campo device è obbligatorio"),
+  isDangerous: z.boolean(),
+  tags: z
+    .array(
+      z.object({
+        title: z.string().nonempty("Il campo title è obbligatorio"),
+        description: z.string().optional(),
+        color: z.string().optional(),
+      })
+    )
+    .optional(),
+});
 
 export default async function handler(
   req: NextApiRequest,
@@ -41,7 +60,13 @@ export async function createEntryDetail(
   res: NextApiResponse
 ) {
   try {
-    const { user, country, ip, device, isDangerous, tags } = req.body;
+    // Valida i dati della richiesta
+    const result = entryDetailSchema.safeParse(req.body);
+    if (!result.success) {
+      return res.status(400).json({ error: result.error.errors });
+    }
+
+    const { user, country, ip, device, isDangerous, tags } = result.data;
     const entryDetail = await prisma.entryDetail.create({
       data: {
         user,
