@@ -7,24 +7,33 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum EntryType {
+  WEB
+  MOBILE
+}
+
 model Entry {
-  id                  Int      @id @default(autoincrement())
+  id                  Int       @id @default(autoincrement())
   applicationHostname String
   timestamp           DateTime
-  type                String
-  user                String
-  country             String
-  ip                  String
-  device              String
-  isDangerous         Boolean
-  tags                Tag[]    @relation("EntryTags") // Rimosso onDelete qui
+  type                EntryType
+}
+
+model EntryDetail {
+  id          Int     @id @default(autoincrement())
+  user        String
+  country     String
+  ip          String
+  device      String
+  isDangerous Boolean
+  tags        Tag[]
 }
 
 model Tag {
-  id          Int    @id @default(autoincrement())
-  title       String
-  description String
-  color       String
-  entryId     Int
-  entry       Entry  @relation("EntryTags", fields: [entryId], references: [id], onDelete: Cascade)
+  id            Int         @id @default(autoincrement())
+  title         String
+  description   String
+  color         String
+  entryDetailId Int
+  entryDetail   EntryDetail @relation(fields: [entryDetailId], references: [id])
 }
