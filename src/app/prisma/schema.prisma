@@ -17,7 +17,7 @@ model Entry {
   ip                  String
   device              String
   isDangerous         Boolean
-  tags                Tag[]
+  tags                Tag[]    @relation("EntryTags") // Rimosso onDelete qui
 }
 
 model Tag {
@@ -26,5 +26,5 @@ model Tag {
   description String
   color       String
   entryId     Int
-  entry       Entry  @relation(fields: [entryId], references: [id])
+  entry       Entry  @relation("EntryTags", fields: [entryId], references: [id], onDelete: Cascade)
 }

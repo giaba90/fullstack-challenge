@@ -60,10 +60,10 @@ export default async function handler(
     }
   } else if (req.method === "DELETE") {
     try {
-      await prisma.entry.delete({
+      const entry = await prisma.entry.delete({
         where: { id },
       });
-      res.status(204).end(); // Nessun contenuto da restituire
+      res.status(200).json(entry);
     } catch (error) {
       res.status(500).json({ error: "Errore nell'eliminazione dell'elemento" });
     }
