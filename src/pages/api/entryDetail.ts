@@ -1,8 +1,6 @@
-// pages/api/entryDetail.ts
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/prisma/client";
 
-// Creare un nuovo EntryDetail
 export async function createEntryDetail(
   req: NextApiRequest,
   res: NextApiResponse
@@ -33,7 +31,6 @@ export async function createEntryDetail(
   }
 }
 
-// Leggere tutti gli EntryDetails
 export async function getEntryDetails(
   req: NextApiRequest,
   res: NextApiResponse
@@ -60,7 +57,6 @@ export async function getEntryDetails(
   }
 }
 
-// Operazione principale per EntryDetail
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse

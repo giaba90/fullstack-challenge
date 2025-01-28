@@ -1,8 +1,6 @@
-// pages/api/entry.ts
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/prisma/client";
 
-// Creare un nuovo Entry
 export async function createEntry(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
     try {
@@ -23,7 +21,6 @@ export async function createEntry(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-// Leggere tutte le Entry
 export async function getEntries(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
     try {
@@ -37,7 +34,6 @@ export async function getEntries(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-// Operazione principale per Entry
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
