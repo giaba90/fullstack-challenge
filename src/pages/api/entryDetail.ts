@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/prisma/client";
 import { z } from "zod";
 
-// Definisci uno schema di validazione per i dati della richiesta
+// validation schema
 const entryDetailSchema = z.object({
   user: z.string().nonempty("Il campo user è obbligatorio"),
   country: z.string().nonempty("Il campo country è obbligatorio"),
@@ -60,7 +60,6 @@ export async function createEntryDetail(
   res: NextApiResponse
 ) {
   try {
-    // Valida i dati della richiesta
     const result = entryDetailSchema.safeParse(req.body);
     if (!result.success) {
       return res.status(400).json({ error: result.error.errors });
