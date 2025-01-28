@@ -30,10 +30,10 @@ model EntryDetail {
 }
 
 model Tag {
-  id            Int         @id @default(autoincrement())
-  title         String
-  description   String
-  color         String
-  entryDetailId Int
-  entryDetail   EntryDetail @relation(fields: [entryDetailId], references: [id])
+  id          Int         @id @default(autoincrement())
+  title       String
+  description String
+  color       String
+  entryId     Int
+  entryDetail EntryDetail @relation(fields: [entryId], references: [id], onDelete: Cascade)
 }
