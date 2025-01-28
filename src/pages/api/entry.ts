@@ -1,5 +1,14 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/prisma/client";
+import { z } from "zod";
+
+// Definisci uno schema di validazione per i dati della richiesta
+const entrySchema = z.object({
+  applicationHostname: z
+    .string()
+    .nonempty("Il campo applicationHostname è obbligatorio"),
+  type: z.string().nonempty("Il campo type è obbligatorio"),
+});
 
 export default async function handler(
   req: NextApiRequest,
@@ -25,7 +34,13 @@ export async function getEntries(req: NextApiRequest, res: NextApiResponse) {
 
 export async function createEntry(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const { applicationHostname, type } = req.body;
+    // Valida i dati della richiesta
+    const result = entrySchema.safeParse(req.body);
+    if (!result.success) {
+      return res.status(400).json({ error: result.error.errors });
+    }
+
+    const { applicationHostname, type } = result.data;
     const entry = await prisma.entry.create({
       data: {
         applicationHostname,
