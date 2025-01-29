@@ -10,7 +10,9 @@ function EntryDetail({ entryId }) {
     const fetchEntry = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`/api/entries/${entryId}`);
+        const response = await fetch(
+          `${process.env.API_URL}/entrydetail/${entryId}`
+        );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }

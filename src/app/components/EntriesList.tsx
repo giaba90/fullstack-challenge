@@ -14,7 +14,7 @@ function EntriesList({ onSelectEntry }: EntriesListProps) {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await fetch("/api/entries"); // Endpoint del server
+        const response = await fetch(`${process.env.API_URL}/entry`); // Endpoint del server
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -45,7 +45,7 @@ function EntriesList({ onSelectEntry }: EntriesListProps) {
           <li key={entry.id} className="mb-2 last:mb-0">
             <button
               onClick={() => onSelectEntry(entry.id)}
-              className="w-full text-left bg-gray-100 hover:bg-gray-200 p-2 rounded"
+              className="w-full text-left bg-gray-100 hover:bg-gray-200 p-2 rounded text-black"
             >
               Entry ID: {entry.id}
             </button>

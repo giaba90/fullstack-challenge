@@ -24,7 +24,7 @@ function EntryForm() {
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     try {
-      const response = await fetch("/api/entries", {
+      const response = await fetch(`${process.env.API_URL}/entry`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
