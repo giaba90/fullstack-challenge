@@ -5,7 +5,7 @@ export default function Sidebar() {
   const { entries, setSelectedEntry, deleteEntry } = useEntries();
 
   const handleDelete = (id: number) => {
-    if (window.confirm("Sei sicuro di voler eliminare questa entry?")) {
+    if (window.confirm("Are you sure you want to delete this entry?")) {
       deleteEntry(id);
     }
   };
@@ -78,7 +78,7 @@ export default function Sidebar() {
           </tbody>
         </table>
       ) : (
-        <p className="text-gray-500 text-center py-4">Nessun elemento</p>
+        <p className="text-gray-500 text-center py-4">No entries</p>
       )}
     </aside>
   );

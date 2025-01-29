@@ -38,7 +38,7 @@ export default function MainContent() {
     return (
       <main className="w-2/4 p-8 bg-white shadow-md ml-4">
         <p className="text-center text-gray-500">
-          Seleziona un'entry o crea una nuova entry
+          Select an entry or create a new entry
         </p>
       </main>
     );
@@ -49,9 +49,9 @@ export default function MainContent() {
       <h2 className="text-2xl font-bold mb-6">
         {isEditing
           ? selectedEntry
-            ? "Modifica Entry"
-            : "Nuova Entry"
-          : "Dettagli Entry"}
+            ? "Edit Entry"
+            : "New Entry"
+          : "Entry Details"}
       </h2>
       {isEditing ? (
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -172,13 +172,13 @@ export default function MainContent() {
               onClick={() => setIsEditing(false)}
               className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              Annulla
+              Cancel
             </button>
             <button
               type="submit"
               className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              Salva
+              Save
             </button>
           </div>
         </form>
@@ -230,7 +230,7 @@ export default function MainContent() {
           onClick={() => setIsEditing(true)}
           className="mt-4 px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
-          Modifica
+          Edit
         </button>
       )}
     </main>

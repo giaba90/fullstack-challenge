@@ -1,15 +1,15 @@
 import { z } from "zod";
 
 const entryDetailSchema = z.object({
-  user: z.string().nonempty("Il campo user è obbligatorio"),
-  country: z.string().nonempty("Il campo country è obbligatorio"),
-  ip: z.string().nonempty("Il campo ip è obbligatorio"),
-  device: z.string().nonempty("Il campo device è obbligatorio"),
+  user: z.string().nonempty("The user field is required"),
+  country: z.string().nonempty("The country field is required"),
+  ip: z.string().nonempty("The IP field is required"),
+  device: z.string().nonempty("The device field is required"),
   isDangerous: z.boolean(),
   tags: z
     .array(
       z.object({
-        title: z.string().nonempty("Il campo title è obbligatorio"),
+        title: z.string().nonempty("The title field is required"),
         description: z.string().optional(),
         color: z.string().optional(),
       })
@@ -20,8 +20,8 @@ const entryDetailSchema = z.object({
 const entrySchema = z.object({
   applicationHostname: z
     .string()
-    .nonempty("Il campo applicationHostname è obbligatorio"),
-  type: z.string().nonempty("Il campo type è obbligatorio"),
+    .nonempty("The applicationHostname field is required"),
+  type: z.string().nonempty("The type field is required"),
 });
 
 const idSchema = z.number().int().positive();
