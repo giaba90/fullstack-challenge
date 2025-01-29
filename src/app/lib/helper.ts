@@ -16,8 +16,8 @@ function handleError({
 }
 
 // Funzione helper per la validazione dell'ID
-function validateId({ id }: { id: any }) {
-  const idResult = idSchema.safeParse(Number(id));
+function validateId({ id }: { id: number }) {
+  const idResult = idSchema.safeParse(id);
   if (!idResult.success) {
     return { success: false, error: "ID non valido" };
   }
