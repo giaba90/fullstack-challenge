@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/prisma/client";
 import { entrySchema } from "@/lib/validation";
-import { handleError } from "@/lib/helper";
+import { handleError, validateApiKey } from "@/lib/helper";
 
 export default async function handler(
   req: NextApiRequest,
@@ -18,15 +18,27 @@ export default async function handler(
 
 // GET /api/entry
 export async function getEntries(req: NextApiRequest, res: NextApiResponse) {
+  // Validazione API key
+  const apiKeyValidation = validateApiKey(req.headers);
+  if (!apiKeyValidation.success) {
+    return res.status(401).json({ error: apiKeyValidation.error });
+  }
+
   try {
     const entries = await prisma.entry.findMany();
     res.status(200).json(entries);
   } catch (error) {
-    handleError(res, error, "Errore nella ricerca delle Entry");
+    handleError({ res, error, message: "Errore nella ricerca delle Entry" });
   }
 }
 // POST /api/entry
 export async function createEntry(req: NextApiRequest, res: NextApiResponse) {
+  // Validazione API key
+  validateApiKey(req.headers);
+  if (!validateApiKey(req.headers).success) {
+    return res.status(401).json({ error: validateApiKey(req.headers).error });
+  }
+
   try {
     // Validation
     const result = entrySchema.safeParse(req.body);
@@ -44,6 +56,6 @@ export async function createEntry(req: NextApiRequest, res: NextApiResponse) {
     });
     res.status(201).json(entry);
   } catch (error) {
-    handleError(res, error, "Errore nella creazione della Entry");
+    handleError({ res, error, message: "Errore nella creazione della Entry" });
   }
 }

@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/prisma/client";
-import { handleError, validateId } from "@/lib/helper";
+import { handleError, validateId, validateApiKey } from "@/lib/helper";
 import { entryDetailSchema } from "@/lib/validation";
 
 export default async function handler(
@@ -24,7 +24,13 @@ export async function getEntryDetail(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { success, data, error } = validateId(req.query.id);
+  // Validazione API key
+  const apiKeyValidation = validateApiKey(req.headers);
+  if (!apiKeyValidation.success) {
+    return res.status(401).json({ error: apiKeyValidation.error });
+  }
+
+  const { success, data, error } = validateId({ id: req.query.id });
   if (!success) {
     return res.status(400).json({ error });
   }
@@ -48,7 +54,11 @@ export async function getEntryDetail(
     }
     res.status(200).json(entryDetail);
   } catch (error) {
-    handleError(res, error, "Errore nel recupero dell'EntryDetail");
+    handleError({
+      res,
+      error,
+      message: "Errore nel recupero dell'EntryDetail",
+    });
   }
 }
 
@@ -57,7 +67,13 @@ export async function updateEntryDetail(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { success, data, error } = validateId(req.query.id);
+  // Validazione API key
+  const apiKeyValidation = validateApiKey(req.headers);
+  if (!apiKeyValidation.success) {
+    return res.status(401).json({ error: apiKeyValidation.error });
+  }
+
+  const { success, data, error } = validateId({ id: req.query.id });
   if (!success) {
     return res.status(400).json({ error });
   }
@@ -88,7 +104,11 @@ export async function updateEntryDetail(
     });
     res.status(200).json(entryDetail);
   } catch (error) {
-    handleError(res, error, "Errore nell'aggiornamento dell'EntryDetail");
+    handleError({
+      res,
+      error,
+      message: "Errore nell'aggiornamento dell'EntryDetail",
+    });
   }
 }
 
@@ -97,7 +117,12 @@ export async function deleteEntryDetail(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { success, data, error } = validateId(req.query.id);
+  const apiKeyValidation = validateApiKey(req.headers);
+  if (!apiKeyValidation.success) {
+    return res.status(401).json({ error: apiKeyValidation.error });
+  }
+
+  const { success, data, error } = validateId({ id: req.query.id });
   if (!success) {
     return res.status(400).json({ error });
   }
@@ -109,6 +134,10 @@ export async function deleteEntryDetail(
     });
     res.status(200).json({ message: "EntryDetail eliminato con successo" });
   } catch (error) {
-    handleError(res, error, "Errore nell'eliminazione dell'EntryDetail");
+    handleError({
+      res,
+      error,
+      message: "Errore nell'eliminazione dell'EntryDetail",
+    });
   }
 }

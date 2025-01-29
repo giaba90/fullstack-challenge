@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/prisma/client";
-import { handleError } from "@/lib/helper";
+import { handleError, validateApiKey } from "@/lib/helper";
 import { entryDetailSchema } from "@/lib/validation";
 
 export default async function handler(
@@ -19,6 +19,12 @@ export default async function handler(
 
 // GET /api/entryDetail
 async function getEntryDetails(req: NextApiRequest, res: NextApiResponse) {
+  // Validazione API key
+  const apiKeyValidation = validateApiKey(req.headers);
+  if (!apiKeyValidation.success) {
+    return res.status(401).json({ error: apiKeyValidation.error });
+  }
+
   try {
     const entryDetails = await prisma.entryDetail.findMany({
       include: {
@@ -33,12 +39,22 @@ async function getEntryDetails(req: NextApiRequest, res: NextApiResponse) {
     });
     res.status(200).json(entryDetails);
   } catch (error) {
-    handleError(res, error, "Errore nel recupero degli EntryDetails");
+    handleError({
+      res,
+      error,
+      message: "Errore nel recupero degli EntryDetails",
+    });
   }
 }
 
 // POST /api/entryDetail
 async function createEntryDetail(req: NextApiRequest, res: NextApiResponse) {
+  // Validazione API key
+  const apiKeyValidation = validateApiKey(req.headers);
+  if (!apiKeyValidation.success) {
+    return res.status(401).json({ error: apiKeyValidation.error });
+  }
+
   // Valida i dati della richiesta
   const result = entryDetailSchema.safeParse(req.body);
   if (!result.success) {
@@ -61,6 +77,10 @@ async function createEntryDetail(req: NextApiRequest, res: NextApiResponse) {
     });
     res.status(201).json(entryDetail);
   } catch (error) {
-    handleError(res, error, "Errore nella creazione dell'EntryDetail");
+    handleError({
+      res,
+      error,
+      message: "Errore nella creazione dell'EntryDetail",
+    });
   }
 }
