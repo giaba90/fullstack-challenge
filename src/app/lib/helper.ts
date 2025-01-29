@@ -27,7 +27,7 @@ function validateId({ id }: { id: any }) {
 // Funzione helper per la validazione dell'API key
 function validateApiKey(headers: NextApiRequest["headers"]) {
   const apiKey = headers["x-api-key"];
-  if (apiKey !== process.env.API_KEY) {
+  if (apiKey !== process.env.NEXT_PUBLIC_API_KEY) {
     return { success: false, error: "API KEY non valida" };
   }
   return { success: true };

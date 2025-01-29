@@ -24,10 +24,11 @@ function EntryForm() {
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${process.env.API_URL}/entry`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/entry`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "x-api-key": process.env.NEXT_PUBLIC_API_KEY || "",
         },
         body: JSON.stringify(newEntry),
       });

@@ -5,8 +5,15 @@ interface EntriesListProps {
   onSelectEntry: (id: number) => void;
 }
 
+type Entry = {
+  id: number;
+  applicationHostname: string;
+  timestamp: string;
+  type: string;
+};
+
 function EntriesList({ onSelectEntry }: EntriesListProps) {
-  const [entries, setEntries] = useState<{ id: number }[]>([]);
+  const [entries, setEntries] = useState<Entry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -14,13 +21,17 @@ function EntriesList({ onSelectEntry }: EntriesListProps) {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`${process.env.API_URL}/entry`); // Endpoint del server
+        const response = await fetch("/api/entry", {
+          headers: {
+            "x-api-key": process.env.NEXT_PUBLIC_API_KEY || "",
+          },
+        });
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
         setEntries(data);
-      } catch (error) {
+      } catch (error: any) {
         setError(error.message);
       }
       setLoading(false);
@@ -47,7 +58,7 @@ function EntriesList({ onSelectEntry }: EntriesListProps) {
               onClick={() => onSelectEntry(entry.id)}
               className="w-full text-left bg-gray-100 hover:bg-gray-200 p-2 rounded text-black"
             >
-              Entry ID: {entry.id}
+              Entry Hostname: {entry.applicationHostname} - ID {entry.id}
             </button>
           </li>
         ))}

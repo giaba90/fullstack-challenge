@@ -11,7 +11,12 @@ function EntryDetail({ entryId }) {
       setLoading(true);
       try {
         const response = await fetch(
-          `${process.env.API_URL}/entrydetail/${entryId}`
+          `${process.env.NEXT_PUBLIC_API_URL}/entrydetail/${entryId}`,
+          {
+            headers: {
+              "x-api-key": process.env.NEXT_PUBLIC_API_KEY || "",
+            },
+          }
         );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
