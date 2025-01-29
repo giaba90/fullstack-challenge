@@ -1,25 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/prisma/client";
-import { z } from "zod";
-
-// Define a validation schema for request data
-const entryUpdateSchema = z.object({
-  applicationHostname: z
-    .string()
-    .nonempty("Il campo applicationHostname è obbligatorio"),
-  type: z.string().nonempty("Il campo type è obbligatorio"),
-});
-
-const idSchema = z.number().int().positive();
-
-// Helper function for ID validation
-function validateId(id: any) {
-  const idResult = idSchema.safeParse(Number(id));
-  if (!idResult.success) {
-    return { success: false, error: "ID non valido" };
-  }
-  return { success: true, data: idResult.data };
-}
+import { validateId } from "@/lib/helper";
+import { handleError } from "@/lib/helper";
+import { entrySchema } from "@/lib/validation";
 
 export default async function handler(
   req: NextApiRequest,
@@ -55,7 +38,7 @@ async function getEntry(req: NextApiRequest, res: NextApiResponse) {
     }
     res.status(200).json(entry);
   } catch (error) {
-    res.status(500).json({ error: "Errore nel recupero dell'Entry" });
+    handleError(res, error, "Errore nella ricerca dell'Entry");
   }
 }
 
@@ -68,7 +51,7 @@ async function updateEntry(req: NextApiRequest, res: NextApiResponse) {
   }
   const id = data;
 
-  const result = entryUpdateSchema.safeParse(req.body);
+  const result = entrySchema.safeParse(req.body);
   if (!result.success) {
     return res.status(400).json({ error: result.error.errors });
   }
@@ -86,7 +69,7 @@ async function updateEntry(req: NextApiRequest, res: NextApiResponse) {
     });
     res.status(200).json(entry);
   } catch (error) {
-    res.status(500).json({ error: "Errore nell'aggiornamento dell'Entry" });
+    handleError(res, error, "Errore nell'aggiornamento dell'Entry");
   }
 }
 
@@ -105,6 +88,6 @@ async function deleteEntry(req: NextApiRequest, res: NextApiResponse) {
     });
     res.status(200).json({ message: "Entry eliminata con successo" });
   } catch (error) {
-    res.status(500).json({ error: "Errore nell'eliminazione dell'Entry" });
+    handleError(res, error, "Errore nell'eliminazione dell'Entry");
   }
 }

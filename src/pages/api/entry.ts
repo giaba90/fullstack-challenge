@@ -1,14 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/prisma/client";
-import { z } from "zod";
-
-// Validation schema
-const entrySchema = z.object({
-  applicationHostname: z
-    .string()
-    .nonempty("Il campo applicationHostname è obbligatorio"),
-  type: z.string().nonempty("Il campo type è obbligatorio"),
-});
+import { entrySchema } from "@/lib/validation";
+import { handleError } from "@/lib/helper";
 
 export default async function handler(
   req: NextApiRequest,
@@ -23,15 +16,16 @@ export default async function handler(
   }
 }
 
+// GET /api/entry
 export async function getEntries(req: NextApiRequest, res: NextApiResponse) {
   try {
     const entries = await prisma.entry.findMany();
     res.status(200).json(entries);
   } catch (error) {
-    res.status(500).json({ error: "Errore nel recupero delle Entries" });
+    handleError(res, error, "Errore nella ricerca delle Entry");
   }
 }
-
+// POST /api/entry
 export async function createEntry(req: NextApiRequest, res: NextApiResponse) {
   try {
     // Validation
@@ -50,6 +44,6 @@ export async function createEntry(req: NextApiRequest, res: NextApiResponse) {
     });
     res.status(201).json(entry);
   } catch (error) {
-    res.status(500).json({ error: "Errore nella creazione dell'Entry" });
+    handleError(res, error, "Errore nella creazione della Entry");
   }
 }
