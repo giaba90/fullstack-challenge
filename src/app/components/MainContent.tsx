@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useEntries } from "../context/EntriesContext";
-import type { Entry } from '../state/types/entries';
-import { EntryEditForm } from './entries/EntryEditForm';
-import EntryDetail from './entries/EntryDetail';
+import type { Entry } from "../context/EntriesContext";
+
+const ENTRY_TYPES = ["WEB", "MOBILE"] as const;
 
 export default function MainContent() {
   const {
@@ -151,7 +151,10 @@ export default function MainContent() {
             ))}
           </div>
         </div>
-        <EntryDetail label="Is Dangerous" value={selectedEntry?.isDangerous ? "Yes" : "No"} />
+        <EntryDetail
+          label="Is Dangerous"
+          value={selectedEntry?.isDangerous ? "Yes" : "No"}
+        />
       </div>
 
       <button
