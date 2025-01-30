@@ -7,7 +7,7 @@ import { entriesReducer, initialState } from "../state/reducers/entriesReducer";
 import { Entry } from "@/state/types/entries";
 
 export default function Sidebar() {
-  const { entries: contextEntries } = useEntries();
+  const { entries: contextEntries, setSelectedEntry } = useEntries();
   const [state, dispatch] = useReducer(entriesReducer, {
     ...initialState,
     entries: contextEntries
@@ -49,6 +49,11 @@ export default function Sidebar() {
     }
   };
 
+  const handleSelectEntry = (entry: Entry) => {
+    setSelectedEntry(entry);
+    dispatch({ type: 'SET_SELECTED_ENTRY', payload: entry });
+  };
+
   return (
     <aside className="w-2/4 bg-white shadow-md p-4 overflow-y-auto">
       <section className="flex justify-between items-center mb-4">
@@ -87,7 +92,7 @@ export default function Sidebar() {
       {entries.length > 0 ? (
         <EntryTable
           entries={entries}
-          onSelect={(entry) => dispatch({ type: 'SET_SELECTED_ENTRY', payload: entry })}
+          onSelect={handleSelectEntry}
           onEdit={handleEditClick}
           onDelete={handleDelete}
         />
