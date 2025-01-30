@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useEntries } from "@/context/EntriesContext";
-import EntryDetail from "./entries/EntryDetail";
-import EntryEditForm from "./entries/EntryEditDetailForm";
-import { EntryDetailType } from "@/state/types/entries";
-import Sidebar from "./Sidebar";
-import { useReducer } from "react";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { EntryTable } from "./entries/EntryTable";
-import { entriesReducer, initialState } from "../state/reducers/entriesReducer";
 import { Entry } from "@/state/types/entries";
 import { EntryNewForm } from "./entries/form/EntryNewForm";
 

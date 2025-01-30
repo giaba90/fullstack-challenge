@@ -1,5 +1,3 @@
-import { useEntries } from "../context/EntriesContext";
-
 export default function Navbar() {
   return (
     <nav className="bg-gray-800 shadow-md">
