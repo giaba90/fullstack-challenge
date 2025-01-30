@@ -54,8 +54,6 @@ export const EntriesProvider: React.FC<{ children: React.ReactNode }> = ({
     <EntriesContext.Provider
       value={{
         entries,
-        isSelectedEntry,
-        setIsSelectedEntry,
         selectedEntry,
         setSelectedEntry,
         addEntry,

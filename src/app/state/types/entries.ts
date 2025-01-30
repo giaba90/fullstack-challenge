@@ -20,6 +20,8 @@ type Entry = {
     type: string;
 };
 
+
+
 type EntryState = {
     entries: Entry[];
     selectedEntry: Entry | null;

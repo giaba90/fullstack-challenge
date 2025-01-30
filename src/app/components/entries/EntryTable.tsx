@@ -1,14 +1,16 @@
+import { MouseEvent } from 'react';
 import type { Entry } from '../../state/types/entries';
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 interface EntryTableProps {
     entries: Entry[];
-    onSelect: (entry: Entry) => void;
-    onEdit: (entry: Entry, e: React.MouseEvent) => void;
-    onDelete: (id: number, e: React.MouseEvent) => void;
 }
 
-export function EntryTable({ entries, onSelect, onEdit, onDelete }: EntryTableProps) {
+export function EntryTable({ entries }: EntryTableProps) {
+    const onSelect = (value: Entry) => { }
+    const onEdit = (value: Entry, e: MouseEvent<HTMLButtonElement, MouseEvent>) => { }
+    const onDelete = (value: number, e: MouseEvent<HTMLButtonElement, MouseEvent>) => { }
+
     return (
         <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">

@@ -56,9 +56,9 @@ export default function Sidebar() {/*
     dispatch({ type: 'SET_SELECTED_ENTRY', payload: entry });
   };*/
   const [entries, setEntries] = useState<Entry[]>([]);
-  const showNewForm: boolean = false;
-  const showEditForm: boolean = false;
-  const editingEntry: boolean = false;
+  const [showNewForm, setShowNewForm] = useState<boolean>(false);
+  const [showEditForm, setShowEditForm] = useState<boolean>(false);
+  const [editingEntry, setEditingEntry] = useState<Entry | null>(null);
 
   useEffect(() => {
     const fetchEntries = async () => {
@@ -78,7 +78,7 @@ export default function Sidebar() {/*
     fetchEntries();
   }, []);
 
-  const handleNewEntry = () => { }
+
   const handleSubmitNew = () => { }
   const handleSelectEntry = () => { }
   const handleEditClick = () => { }
@@ -91,7 +91,7 @@ export default function Sidebar() {/*
       <section className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold">List Entries</h2>
         <button
-          onClick={handleNewEntry}
+          onClick={() => setShowNewForm(true)}
           className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
           <PlusIcon className="h-5 w-5 mr-2" />
@@ -101,10 +101,10 @@ export default function Sidebar() {/*
 
       {showNewForm && (
         <EntryForm
-          entry={newEntry}
+          entry={editingEntry}
           onSubmit={handleSubmitNew}
-          onChange={(entry) => dispatch({ type: 'UPDATE_NEW_ENTRY', payload: entry })}
-          onCancel={() => dispatch({ type: 'SET_SHOW_NEW_FORM', payload: false })}
+          onChange={(entry) => setEditingEntry(entry)}
+          onCancel={() => setShowNewForm(false)}
           submitLabel="Create"
         />
       )}
@@ -112,11 +112,16 @@ export default function Sidebar() {/*
       {showEditForm && editingEntry && (
         <EntryForm
           entry={editingEntry}
-          onSubmit={handleEditSubmit}
-          onChange={(entry) => dispatch({ type: 'SET_EDITING_ENTRY', payload: entry })}
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (editingEntry) {
+              // Handle update
+            }
+          }}
+          onChange={(entry) => setEditingEntry(entry)}
           onCancel={() => {
-            dispatch({ type: 'SET_SHOW_EDIT_FORM', payload: false });
-            dispatch({ type: 'SET_EDITING_ENTRY', payload: null });
+            setShowEditForm(false);
+            setEditingEntry(null);
           }}
         />
       )}
@@ -124,9 +129,9 @@ export default function Sidebar() {/*
       {entries.length > 0 ? (
         <EntryTable
           entries={entries}
-          onSelect={handleSelectEntry}
-          onEdit={handleEditClick}
-          onDelete={handleDelete}
+        //      onSelect={handleSelectEntry}
+        //     onEdit={handleEditClick}
+        //    onDelete={handleDelete}
         />
       ) : (
         <p className="text-gray-500 text-center py-4">No entries</p>
