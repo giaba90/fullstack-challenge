@@ -1,25 +1,4 @@
-import type { Entry } from "../context/EntriesContext";
-
-type EntryState = {
-    entries: Entry[];
-    selectedEntry: Entry | null;
-    isEditing: boolean;
-    showNewForm: boolean;
-    showEditForm: boolean;
-    editingEntry: Entry | null;
-    newEntry: Entry;
-};
-
-type EntryAction =
-    | { type: 'SET_SELECTED_ENTRY'; payload: Entry | null }
-    | { type: 'SET_IS_EDITING'; payload: boolean }
-    | { type: 'SET_SHOW_NEW_FORM'; payload: boolean }
-    | { type: 'SET_SHOW_EDIT_FORM'; payload: boolean }
-    | { type: 'SET_EDITING_ENTRY'; payload: Entry | null }
-    | { type: 'UPDATE_NEW_ENTRY'; payload: Entry }
-    | { type: 'ADD_ENTRY'; payload: Entry }
-    | { type: 'UPDATE_ENTRY'; payload: { id: number; entry: Partial<Entry> } }
-    | { type: 'DELETE_ENTRY'; payload: number };
+import type { Entry, EntryState, EntryAction } from '../types/entries';
 
 const initialEntry: Entry = {
     id: 0,

@@ -1,12 +1,18 @@
 import { useReducer } from "react";
+import { useEntries } from "../context/EntriesContext";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { EntryTable } from "./entries/EntryTable";
 import { EntryForm } from "./entries/EntryForm";
-import { entriesReducer, initialState } from "../reducers/entriesReducer";
-import type { Entry } from "../context/EntriesContext";
+import { entriesReducer, initialState } from "../state/reducers/entriesReducer";
+import { Entry } from "@/state/types/entries";
 
 export default function Sidebar() {
-  const [state, dispatch] = useReducer(entriesReducer, initialState);
+  const { entries: contextEntries } = useEntries();
+  const [state, dispatch] = useReducer(entriesReducer, {
+    ...initialState,
+    entries: contextEntries
+  });
+
   const { entries, showNewForm, showEditForm, editingEntry, newEntry } = state;
 
   const handleDelete = (id: number, e: React.MouseEvent) => {

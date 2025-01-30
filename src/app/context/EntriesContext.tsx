@@ -1,35 +1,9 @@
 import type React from "react";
 import { createContext, useState, useContext } from "react";
+import type { EntriesContextType, Entry } from '../state/types/entries';
 
-type Tag = {
-  title: string,
-  description: string,
-  color: string
-}
 
-export type Entry = {
-  id: number;
-  application_hostname: string;
-  timestamp: string;
-  type: string;
-  user: string;
-  country: string;
-  ip: string;
-  device: string;
-  tags: Tag[];
-  isDangerous: boolean;
-};
 
-type EntriesContextType = {
-  entries: Entry[];
-  selectedEntry: Entry | null;
-  setSelectedEntry: (entry: Entry | null) => void;
-  addEntry: (entry: Omit<Entry, "id">) => void;
-  updateEntry: (id: number, updatedEntry: Partial<Entry>) => void;
-  deleteEntry: (id: number) => void;
-  setIsEditing: (isEditing: boolean) => void;
-  isEditing: boolean;
-};
 
 const EntriesContext = createContext<EntriesContextType | undefined>(undefined);
 

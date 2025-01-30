@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useEntries } from "../context/EntriesContext";
-import type { Entry } from "../context/EntriesContext";
+import type { Entry } from '../state/types/entries';
 
 export default function MainContent() {
   const {

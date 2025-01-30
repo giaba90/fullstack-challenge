@@ -1,4 +1,4 @@
-import { Entry } from "../../context/EntriesContext";
+import type { Entry } from '../../state/types/entries';
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 interface EntryTableProps {

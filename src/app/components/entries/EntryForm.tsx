@@ -1,4 +1,4 @@
-import { Entry } from "../../context/EntriesContext";
+import type { Entry } from '../../state/types/entries';
 
 const ENTRY_TYPES = ['WEB', 'MOBILE'] as const;
 
