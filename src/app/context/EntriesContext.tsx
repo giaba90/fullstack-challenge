@@ -1,9 +1,6 @@
 import type React from "react";
 import { createContext, useState, useContext } from "react";
-import type { EntriesContextType, Entry } from '../state/types/entries';
-
-
-
+import type { EntriesContextType, Entry } from "../state/types/entries";
 
 const EntriesContext = createContext<EntriesContextType | undefined>(undefined);
 
@@ -20,16 +17,19 @@ export const EntriesProvider: React.FC<{ children: React.ReactNode }> = ({
       country: "Italy",
       ip: "192.168.1.1",
       device: "iPhone",
-      tags: [{
-        title: "OK",
-        description: "This is a description for OK tag",
-        color: "#6EB72F"
-      },
-      {
-        title: "NEW",
-        description: "This is a NEW tag and it appears because loren ipsum dolor sit amet",
-        color: "#026FBC"
-      }],
+      tags: [
+        {
+          title: "OK",
+          description: "This is a description for OK tag",
+          color: "#6EB72F",
+        },
+        {
+          title: "NEW",
+          description:
+            "This is a NEW tag and it appears because loren ipsum dolor sit amet",
+          color: "#026FBC",
+        },
+      ],
       isDangerous: false,
     },
     // Aggiungi altri entries come necessario

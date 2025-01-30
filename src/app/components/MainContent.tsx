@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useEntries } from "../context/EntriesContext";
-import type { Entry } from "../context/EntriesContext";
-
-const ENTRY_TYPES = ["WEB", "MOBILE"] as const;
+import type { Entry } from "../state/types/entries";
+import EntryDetail from "./entries/EntryDetail";
+import { EntryEditForm } from "./entries/EntryEditForm";
 
 export default function MainContent() {
   const {
@@ -49,26 +49,6 @@ export default function MainContent() {
       setFormData(selectedEntry);
     }
   }, [selectedEntry]);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
-
-    if (name.startsWith("tags.")) {
-      const [_, index, field] = name.split(".");
-      setFormData((prev) => ({
-        ...prev,
-        tags:
-          prev.tags?.map((tag, i) =>
-            i === parseInt(index) ? { ...tag, [field]: value } : tag
-          ) || [],
-      }));
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: type === "checkbox" ? checked : value,
-      }));
-    }
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
