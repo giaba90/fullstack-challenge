@@ -2,36 +2,42 @@ import { useState, useEffect } from "react";
 import { useEntries } from "../context/EntriesContext";
 import type { Entry } from "../context/EntriesContext";
 
-const ENTRY_TYPES = ['WEB', 'MOBILE'] as const;
-
 export default function MainContent() {
-  const { selectedEntry, updateEntry, setSelectedEntry, setIsEditing: setIsEditingContext, isEditing } = useEntries();
-  const [formData, setFormData] = useState<Entry>(selectedEntry || {
-    id: 0,
-    application_hostname: '',
-    timestamp: '',
-    type: '',
-    user: '',
-    country: '',
-    ip: '',
-    device: '',
-    tags: [],
-    isDangerous: false
-  });
+  const {
+    selectedEntry,
+    updateEntry,
+    setSelectedEntry,
+    setIsEditing: setIsEditingContext,
+    isEditing,
+  } = useEntries();
+  const [formData, setFormData] = useState<Entry>(
+    selectedEntry || {
+      id: 0,
+      application_hostname: "",
+      timestamp: "",
+      type: "",
+      user: "",
+      country: "",
+      ip: "",
+      device: "",
+      tags: [],
+      isDangerous: false,
+    }
+  );
 
   useEffect(() => {
     if (!selectedEntry && !isEditing) {
       setFormData({
         id: 0,
-        application_hostname: '',
-        timestamp: '',
-        type: '',
-        user: '',
-        country: '',
-        ip: '',
-        device: '',
+        application_hostname: "",
+        timestamp: "",
+        type: "",
+        user: "",
+        country: "",
+        ip: "",
+        device: "",
         tags: [],
-        isDangerous: false
+        isDangerous: false,
       });
     }
   }, [selectedEntry, isEditing]);
@@ -45,13 +51,14 @@ export default function MainContent() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
 
-    if (name.startsWith('tags.')) {
-      const [_, index, field] = name.split('.');
+    if (name.startsWith("tags.")) {
+      const [_, index, field] = name.split(".");
       setFormData((prev) => ({
         ...prev,
-        tags: prev.tags?.map((tag, i) =>
-          i === parseInt(index) ? { ...tag, [field]: value } : tag
-        ) || []
+        tags:
+          prev.tags?.map((tag, i) =>
+            i === parseInt(index) ? { ...tag, [field]: value } : tag
+          ) || [],
       }));
     } else {
       setFormData((prev) => ({
@@ -87,15 +94,15 @@ export default function MainContent() {
         onClick={() => {
           setFormData({
             id: 0,
-            application_hostname: '',
-            timestamp: '',
-            type: '',
-            user: '',
-            country: '',
-            ip: '',
-            device: '',
+            application_hostname: "",
+            timestamp: "",
+            type: "",
+            user: "",
+            country: "",
+            ip: "",
+            device: "",
             tags: [],
-            isDangerous: false
+            isDangerous: false,
           });
           setIsEditingContext(false);
           setSelectedEntry(null);
@@ -125,9 +132,7 @@ export default function MainContent() {
         </div>
         <div>
           <p className="text-sm font-medium text-gray-500">Country</p>
-          <p className="mt-1 text-sm text-gray-900">
-            {selectedEntry?.country}
-          </p>
+          <p className="mt-1 text-sm text-gray-900">{selectedEntry?.country}</p>
         </div>
         <div>
           <p className="text-sm font-medium text-gray-500">IP</p>
@@ -135,17 +140,23 @@ export default function MainContent() {
         </div>
         <div>
           <p className="text-sm font-medium text-gray-500">Device</p>
-          <p className="mt-1 text-sm text-gray-900">
-            {selectedEntry?.device}
-          </p>
+          <p className="mt-1 text-sm text-gray-900">{selectedEntry?.device}</p>
         </div>
         <div>
           <p className="text-sm font-medium text-gray-500">Tags</p>
           <div className="mt-1">
             {selectedEntry?.tags.map((tag, index) => (
-              <div key={index} className="flex items-center space-x-2" style={{ backgroundColor: tag.color + '20' }}>
-                <span className="block w-1/3 py-2 px-3 text-sm text-gray-900">{tag.title}</span>
-                <span className="block w-1/2 py-2 px-3 text-sm text-gray-700">{tag.description}</span>
+              <div
+                key={index}
+                className="flex items-center space-x-2"
+                style={{ backgroundColor: tag.color + "20" }}
+              >
+                <span className="block w-1/3 py-2 px-3 text-sm text-gray-900">
+                  {tag.title}
+                </span>
+                <span className="block w-1/2 py-2 px-3 text-sm text-gray-700">
+                  {tag.description}
+                </span>
               </div>
             ))}
           </div>
@@ -255,9 +266,17 @@ export default function MainContent() {
             </label>
             <div className="mt-1 space-y-2">
               {formData.tags?.map((tag, index) => (
-                <div key={index} className="flex items-center space-x-2" style={{ backgroundColor: tag.color + '20' }}>
-                  <span className="block w-1/3 py-2 px-3 text-sm text-gray-900">{tag.title}</span>
-                  <span className="block w-1/2 py-2 px-3 text-sm text-gray-700">{tag.description}</span>
+                <div
+                  key={index}
+                  className="flex items-center space-x-2"
+                  style={{ backgroundColor: tag.color + "20" }}
+                >
+                  <span className="block w-1/3 py-2 px-3 text-sm text-gray-900">
+                    {tag.title}
+                  </span>
+                  <span className="block w-1/2 py-2 px-3 text-sm text-gray-700">
+                    {tag.description}
+                  </span>
                 </div>
               ))}
             </div>
