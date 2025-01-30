@@ -4,17 +4,21 @@ type Tag = {
     color: string;
 };
 
-type Entry = {
-    id: number;
-    application_hostname: string;
-    timestamp: string;
-    type: string;
+type EntryDetailType = {
     user: string;
     country: string;
     ip: string;
     device: string;
     tags: Tag[];
     isDangerous: boolean;
+}
+
+type Entry = {
+    id: number;
+    application_hostname: string;
+    timestamp: string;
+    type: string;
+    entrydetail: EntryDetailType;
 };
 
 type EntryState = {
@@ -49,4 +53,4 @@ type EntryAction =
     | { type: 'UPDATE_ENTRY'; payload: { id: number; entry: Partial<Entry> } }
     | { type: 'DELETE_ENTRY'; payload: number };
 
-export type { Entry, EntryAction, EntriesContextType, EntryState };
+export type { Entry, EntryDetailType, EntryAction, EntriesContextType, EntryState };

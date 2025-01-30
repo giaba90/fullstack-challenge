@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useEntries } from "@/context/EntriesContext";
 import EntryDetail from "./entries/EntryDetail";
 import EntryEditForm from "./entries/EntryEditForm";
-import { Entry } from "@/state/types/entries";
+import { Entry, EntryDetailType } from "@/state/types/entries";
 
 const MainContent: React.FC = () => {
   const {
