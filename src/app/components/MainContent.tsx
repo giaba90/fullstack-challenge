@@ -1,27 +1,66 @@
 import { useState, useEffect } from "react";
 import { useEntries } from "../context/EntriesContext";
+import type { Entry } from "../context/EntriesContext";
 
 export default function MainContent() {
-  const { selectedEntry, updateEntry, addEntry } = useEntries();
+  const { selectedEntry, updateEntry, addEntry, setSelectedEntry } = useEntries();
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState(selectedEntry || {});
+  const [formData, setFormData] = useState<Entry>({
+    id: 0,
+    application_hostname: '',
+    timestamp: '',
+    type: '',
+    user: '',
+    country: '',
+    ip: '',
+    device: '',
+    tags: [],
+    isDangerous: false
+  });
 
   useEffect(() => {
     if (selectedEntry) {
       setFormData(selectedEntry);
       setIsEditing(false);
-    } else {
-      setFormData({});
-      setIsEditing(true);
     }
   }, [selectedEntry]);
 
+
+
+  useEffect(() => {
+    if (!selectedEntry && !isEditing) {
+      setFormData({
+        id: 0,
+        application_hostname: '',
+        timestamp: '',
+        type: '',
+        user: '',
+        country: '',
+        ip: '',
+        device: '',
+        tags: [],
+        isDangerous: false
+      });
+    }
+  }, [selectedEntry, isEditing]);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+
+    if (name.startsWith('tags.')) {
+      const [_, index, field] = name.split('.');
+      setFormData((prev) => ({
+        ...prev,
+        tags: prev.tags?.map((tag, i) =>
+          i === parseInt(index) ? { ...tag, [field]: value } : tag
+        ) || []
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: type === "checkbox" ? checked : value,
+      }));
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -34,7 +73,9 @@ export default function MainContent() {
     setIsEditing(false);
   };
 
-  if (!selectedEntry && !isEditing) {
+  const shouldShowForm = selectedEntry || isEditing;
+
+  if (!shouldShowForm) {
     return (
       <main className="w-2/4 p-8 bg-white shadow-md ml-4">
         <p className="text-center text-gray-500">
@@ -45,7 +86,40 @@ export default function MainContent() {
   }
 
   return (
-    <main className="w-2/4 p-8 bg-white shadow-md ml-4">
+    <main className="w-2/4 p-8 bg-white shadow-md ml-4 relative">
+      <button
+        onClick={() => {
+          setFormData({
+            id: 0,
+            application_hostname: '',
+            timestamp: '',
+            type: '',
+            user: '',
+            country: '',
+            ip: '',
+            device: '',
+            tags: [],
+            isDangerous: false
+          });
+          setIsEditing(false);
+          setSelectedEntry(null);
+        }}
+        className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 focus:outline-none"
+        aria-label="Close form"
+      >
+        <svg
+          className="h-6 w-6"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+
       <h2 className="text-2xl font-bold mb-6">
         {isEditing
           ? selectedEntry
@@ -166,6 +240,22 @@ export default function MainContent() {
               </span>
             </label>
           </div>
+          <div>
+            <label
+              htmlFor="tags"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Tags
+            </label>
+            <div className="mt-1 space-y-2">
+              {formData.tags?.map((tag, index) => (
+                <div key={index} className="flex items-center space-x-2" style={{ backgroundColor: tag.color + '20' }}>
+                  <span className="block w-1/3 py-2 px-3 text-sm text-gray-900">{tag.title}</span>
+                  <span className="block w-1/2 py-2 px-3 text-sm text-gray-700">{tag.description}</span>
+                </div>
+              ))}
+            </div>
+          </div>
           <div className="flex justify-end space-x-3">
             <button
               type="button"
@@ -207,13 +297,11 @@ export default function MainContent() {
           <div>
             <p className="text-sm font-medium text-gray-500">Tags</p>
             <div className="mt-1">
-              {selectedEntry?.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mr-2"
-                >
-                  {tag}
-                </span>
+              {selectedEntry?.tags.map((tag, index) => (
+                <div key={index} className="flex items-center space-x-2" style={{ backgroundColor: tag.color + '20' }}>
+                  <span className="block w-1/3 py-2 px-3 text-sm text-gray-900">{tag.title}</span>
+                  <span className="block w-1/2 py-2 px-3 text-sm text-gray-700">{tag.description}</span>
+                </div>
               ))}
             </div>
           </div>

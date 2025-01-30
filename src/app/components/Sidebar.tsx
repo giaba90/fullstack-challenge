@@ -1,8 +1,9 @@
 import { useEntries } from "../context/EntriesContext";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { PlusIcon } from "@heroicons/react/24/solid";
 
 export default function Sidebar() {
-  const { entries, setSelectedEntry, deleteEntry } = useEntries();
+  const { entries, setSelectedEntry, deleteEntry, setIsEditing } = useEntries();
 
   const handleDelete = (id: number) => {
     if (window.confirm("Are you sure you want to delete this entry?")) {
@@ -10,9 +11,23 @@ export default function Sidebar() {
     }
   };
 
+  const handleNewEntry = () => {
+    setSelectedEntry(null);
+    setIsEditing(true);
+  };
+
   return (
     <aside className="w-2/4 bg-white shadow-md p-4 overflow-y-auto">
-      <h2 className="text-lg font-semibold mb-4">Entries</h2>
+      <section className="flex justify-between items-center mb-4">
+        <h2 className="text-lg font-semibold">Entries</h2>
+        <button
+          onClick={handleNewEntry}
+          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        >
+          <PlusIcon className="h-5 w-5 mr-2" />
+          New Entry
+        </button>
+      </section>
       {entries.length > 0 ? (
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">

@@ -1,7 +1,13 @@
 import type React from "react";
 import { createContext, useState, useContext } from "react";
 
-type Entry = {
+type Tag = {
+  title: string,
+  description: string,
+  color: string
+}
+
+export type Entry = {
   id: number;
   application_hostname: string;
   timestamp: string;
@@ -10,7 +16,7 @@ type Entry = {
   country: string;
   ip: string;
   device: string;
-  tags: string[];
+  tags: Tag[];
   isDangerous: boolean;
 };
 
@@ -21,6 +27,7 @@ type EntriesContextType = {
   addEntry: (entry: Omit<Entry, "id">) => void;
   updateEntry: (id: number, updatedEntry: Partial<Entry>) => void;
   deleteEntry: (id: number) => void;
+  setIsEditing: (isEditing: boolean) => void;
 };
 
 const EntriesContext = createContext<EntriesContextType | undefined>(undefined);
@@ -38,12 +45,22 @@ export const EntriesProvider: React.FC<{ children: React.ReactNode }> = ({
       country: "Italy",
       ip: "192.168.1.1",
       device: "iPhone",
-      tags: ["mobile", "ios"],
+      tags: [{
+        title: "OK",
+        description: "This is a description for OK tag",
+        color: "#6EB72F"
+      },
+      {
+        title: "NEW",
+        description: "This is a NEW tag and it appears because loren ipsum dolor sit amet",
+        color: "#026FBC"
+      }],
       isDangerous: false,
     },
     // Aggiungi altri entries come necessario
   ]);
   const [selectedEntry, setSelectedEntry] = useState<Entry | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
 
   const addEntry = (newEntry: Omit<Entry, "id">) => {
     const id = Math.max(...entries.map((e) => e.id), 0) + 1;
@@ -74,6 +91,7 @@ export const EntriesProvider: React.FC<{ children: React.ReactNode }> = ({
         addEntry,
         updateEntry,
         deleteEntry,
+        setIsEditing,
       }}
     >
       {children}
