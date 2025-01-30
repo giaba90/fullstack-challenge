@@ -20,7 +20,7 @@ type Entry = {
     type: string;
 };
 
-
+export const ENTRY_TYPES = ['WEB', 'MOBILE'] as const;
 
 type EntryState = {
     entries: Entry[];
