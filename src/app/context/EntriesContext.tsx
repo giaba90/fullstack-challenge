@@ -28,6 +28,7 @@ type EntriesContextType = {
   updateEntry: (id: number, updatedEntry: Partial<Entry>) => void;
   deleteEntry: (id: number) => void;
   setIsEditing: (isEditing: boolean) => void;
+  isEditing: boolean;
 };
 
 const EntriesContext = createContext<EntriesContextType | undefined>(undefined);
@@ -92,6 +93,7 @@ export const EntriesProvider: React.FC<{ children: React.ReactNode }> = ({
         updateEntry,
         deleteEntry,
         setIsEditing,
+        isEditing,
       }}
     >
       {children}

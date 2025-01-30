@@ -5,8 +5,7 @@ import type { Entry } from "../context/EntriesContext";
 const ENTRY_TYPES = ['WEB', 'MOBILE'] as const;
 
 export default function MainContent() {
-  const { selectedEntry, updateEntry, setSelectedEntry, setIsEditing: setIsEditingContext } = useEntries();
-  const [isEditing, setIsEditing] = useState(false);
+  const { selectedEntry, updateEntry, setSelectedEntry, setIsEditing: setIsEditingContext, isEditing } = useEntries();
   const [formData, setFormData] = useState<Entry>(selectedEntry || {
     id: 0,
     application_hostname: '',
@@ -19,13 +18,6 @@ export default function MainContent() {
     tags: [],
     isDangerous: false
   });
-
-  useEffect(() => {
-    if (selectedEntry) {
-      setFormData(selectedEntry);
-      setIsEditingContext(false);
-    }
-  }, [selectedEntry, setIsEditingContext]);
 
   useEffect(() => {
     if (!selectedEntry && !isEditing) {
@@ -43,6 +35,12 @@ export default function MainContent() {
       });
     }
   }, [selectedEntry, isEditing]);
+
+  useEffect(() => {
+    if (selectedEntry) {
+      setFormData(selectedEntry);
+    }
+  }, [selectedEntry]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -118,51 +116,57 @@ export default function MainContent() {
         </svg>
       </button>
 
-      <h2 className="text-2xl font-bold mb-6">
-        {isEditing
-          ? selectedEntry
-            ? "Edit Entry"
-            : ""
-          : "Entry Details"}
-      </h2>
-      {isEditing ? (
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label
-              htmlFor="application_hostname"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Hostname
-            </label>
-            <input
-              type="text"
-              id="application_hostname"
-              name="application_hostname"
-              value={formData.application_hostname || ""}
-              onChange={handleInputChange}
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            />
+      <h2 className="text-2xl font-bold mb-6">Entry Details</h2>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <p className="text-sm font-medium text-gray-500">User</p>
+          <p className="mt-1 text-sm text-gray-900">{selectedEntry?.user}</p>
+        </div>
+        <div>
+          <p className="text-sm font-medium text-gray-500">Country</p>
+          <p className="mt-1 text-sm text-gray-900">
+            {selectedEntry?.country}
+          </p>
+        </div>
+        <div>
+          <p className="text-sm font-medium text-gray-500">IP</p>
+          <p className="mt-1 text-sm text-gray-900">{selectedEntry?.ip}</p>
+        </div>
+        <div>
+          <p className="text-sm font-medium text-gray-500">Device</p>
+          <p className="mt-1 text-sm text-gray-900">
+            {selectedEntry?.device}
+          </p>
+        </div>
+        <div>
+          <p className="text-sm font-medium text-gray-500">Tags</p>
+          <div className="mt-1">
+            {selectedEntry?.tags.map((tag, index) => (
+              <div key={index} className="flex items-center space-x-2" style={{ backgroundColor: tag.color + '20' }}>
+                <span className="block w-1/3 py-2 px-3 text-sm text-gray-900">{tag.title}</span>
+                <span className="block w-1/2 py-2 px-3 text-sm text-gray-700">{tag.description}</span>
+              </div>
+            ))}
           </div>
-          <div>
-            <label
-              htmlFor="type"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Type
-            </label>
-            <select
-              id="type"
-              name="type"
-              value={formData.type || ""}
-              onChange={handleInputChange}
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            >
-              <option value="">Select type</option>
-              {ENTRY_TYPES.map(type => (
-                <option key={type} value={type}>{type}</option>
-              ))}
-            </select>
-          </div>
+        </div>
+        <div>
+          <p className="text-sm font-medium text-gray-500">Is Dangerous</p>
+          <p className="mt-1 text-sm text-gray-900">
+            {selectedEntry?.isDangerous ? "Yes" : "No"}
+          </p>
+        </div>
+      </div>
+
+      <button
+        onClick={() => setIsEditingContext(true)}
+        className="mt-4 px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      >
+        Edit
+      </button>
+
+      {isEditing && (
+        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <div>
             <label
               htmlFor="user"
@@ -181,22 +185,6 @@ export default function MainContent() {
           </div>
           <div>
             <label
-              htmlFor="country"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Country
-            </label>
-            <input
-              type="text"
-              id="country"
-              name="country"
-              value={formData.country || ""}
-              onChange={handleInputChange}
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            />
-          </div>
-          <div>
-            <label
               htmlFor="ip"
               className="block text-sm font-medium text-gray-700"
             >
@@ -207,6 +195,22 @@ export default function MainContent() {
               id="ip"
               name="ip"
               value={formData.ip || ""}
+              onChange={handleInputChange}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="country"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Country
+            </label>
+            <input
+              type="text"
+              id="country"
+              name="country"
+              value={formData.country || ""}
               onChange={handleInputChange}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
@@ -274,54 +278,6 @@ export default function MainContent() {
             </button>
           </div>
         </form>
-      ) : (
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <p className="text-sm font-medium text-gray-500">User</p>
-            <p className="mt-1 text-sm text-gray-900">{selectedEntry?.user}</p>
-          </div>
-          <div>
-            <p className="text-sm font-medium text-gray-500">Country</p>
-            <p className="mt-1 text-sm text-gray-900">
-              {selectedEntry?.country}
-            </p>
-          </div>
-          <div>
-            <p className="text-sm font-medium text-gray-500">IP</p>
-            <p className="mt-1 text-sm text-gray-900">{selectedEntry?.ip}</p>
-          </div>
-          <div>
-            <p className="text-sm font-medium text-gray-500">Device</p>
-            <p className="mt-1 text-sm text-gray-900">
-              {selectedEntry?.device}
-            </p>
-          </div>
-          <div>
-            <p className="text-sm font-medium text-gray-500">Tags</p>
-            <div className="mt-1">
-              {selectedEntry?.tags.map((tag, index) => (
-                <div key={index} className="flex items-center space-x-2" style={{ backgroundColor: tag.color + '20' }}>
-                  <span className="block w-1/3 py-2 px-3 text-sm text-gray-900">{tag.title}</span>
-                  <span className="block w-1/2 py-2 px-3 text-sm text-gray-700">{tag.description}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div>
-            <p className="text-sm font-medium text-gray-500">Is Dangerous</p>
-            <p className="mt-1 text-sm text-gray-900">
-              {selectedEntry?.isDangerous ? "Yes" : "No"}
-            </p>
-          </div>
-        </div>
-      )}
-      {!isEditing && (
-        <button
-          onClick={() => setIsEditingContext(true)}
-          className="mt-4 px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          Edit
-        </button>
       )}
     </main>
   );
