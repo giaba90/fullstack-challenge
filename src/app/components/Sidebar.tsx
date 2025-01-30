@@ -5,8 +5,10 @@ import { EntryTable } from "./entries/EntryTable";
 import { EntryForm } from "./entries/EntryForm";
 import { entriesReducer, initialState } from "../state/reducers/entriesReducer";
 import { Entry } from "@/state/types/entries";
+import { useEffect, useState } from "react";
 
-export default function Sidebar() {
+
+export default function Sidebar() {/*
   const { entries: contextEntries, setSelectedEntry } = useEntries();
   const [state, dispatch] = useReducer(entriesReducer, {
     ...initialState,
@@ -52,7 +54,37 @@ export default function Sidebar() {
   const handleSelectEntry = (entry: Entry) => {
     setSelectedEntry(entry);
     dispatch({ type: 'SET_SELECTED_ENTRY', payload: entry });
-  };
+  };*/
+  const [entries, setEntries] = useState<Entry[]>([]);
+  const showNewForm: boolean = false;
+  const showEditForm: boolean = false;
+  const editingEntry: boolean = false;
+
+  useEffect(() => {
+    const fetchEntries = async () => {
+      try {
+        const response = await fetch('/api/entry', {
+          headers: {
+            'x-api-key': '1234567890'
+          }
+        });
+        const data = await response.json();
+        setEntries(data);
+      } catch (error) {
+        console.error('Failed to fetch entries:', error);
+      }
+    };
+
+    fetchEntries();
+  }, []);
+
+  const handleNewEntry = () => { }
+  const handleSubmitNew = () => { }
+  const handleSelectEntry = () => { }
+  const handleEditClick = () => { }
+  const handleDelete = () => {
+
+  }
 
   return (
     <aside className="w-2/4 bg-white shadow-md p-4 overflow-y-auto">

@@ -24,7 +24,7 @@ export function EntryTable({ entries, onSelect, onEdit, onDelete }: EntryTablePr
                 {entries.map((entry) => (
                     <tr key={entry.id} className="hover:bg-gray-50 cursor-pointer" onClick={() => onSelect(entry)}>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{entry.id}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{entry.application_hostname}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{entry.applicationHostname}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{entry.timestamp}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{entry.type}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">

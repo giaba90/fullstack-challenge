@@ -11,24 +11,24 @@ export const EntriesProvider: React.FC<{ children: React.ReactNode }> = ({
   const [selectedEntry, setSelectedEntry] = useState<Entry | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isSelectedEntry, setIsSelectedEntry] = useState(false);
-
-  useEffect(() => {
-    const fetchEntries = async () => {
-      try {
-        const response = await fetch('/api/entry', {
-          headers: {
-            'x-api-key': '1234567890'
-          }
-        });
-        const data = await response.json();
-        setEntries(data);
-      } catch (error) {
-        console.error('Failed to fetch entries:', error);
-      }
-    };
-
-    fetchEntries();
-  }, []);
+  /*
+    useEffect(() => {
+      const fetchEntries = async () => {
+        try {
+          const response = await fetch('/api/entry', {
+            headers: {
+              'x-api-key': '1234567890'
+            }
+          });
+          const data = await response.json();
+          setEntries(data);
+        } catch (error) {
+          console.error('Failed to fetch entries:', error);
+        }
+      };
+  
+      fetchEntries();
+    }, []);*/
 
   const addEntry = (newEntry: Omit<Entry, "id">) => {
     const id = Math.max(...entries.map((e) => e.id), 0) + 1;

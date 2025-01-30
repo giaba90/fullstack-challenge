@@ -15,7 +15,7 @@ type EntryDetailType = {
 
 type Entry = {
     id: number;
-    application_hostname: string;
+    applicationHostname: string;
     timestamp: string;
     type: string;
 };
