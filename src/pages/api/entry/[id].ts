@@ -15,19 +15,19 @@ export default async function handler(
     case "DELETE":
       return deleteEntry(req, res);
     default:
-      res.status(405).json({ error: "Metodo non consentito" });
+      res.status(405).json({ error: "Method not allowed" });
   }
 }
 
-// Funzione per ottenere un entry
+// GET /api/entry/[id]
 async function getEntry(req: NextApiRequest, res: NextApiResponse) {
-  // Validazione API key
+  // API key validation
   const apiKeyValidation = validateApiKey(req.headers);
   if (!apiKeyValidation.success) {
     return res.status(401).json({ error: apiKeyValidation.error });
   }
 
-  // Validazione ID
+  // ID validation
   const { success, data, error } = validateId({ id: req.query.id });
   if (!success) {
     return res.status(400).json({ error });
@@ -39,30 +39,30 @@ async function getEntry(req: NextApiRequest, res: NextApiResponse) {
       where: { id },
     });
     if (!entry) {
-      return res.status(404).json({ error: "Entry non trovata" });
+      return res.status(404).json({ error: "Entry not found" });
     }
     res.status(200).json(entry);
   } catch (error) {
-    handleError({ res, error, message: "Errore nella ricerca dell'Entry" });
+    handleError({ res, error, message: "Error retrieving the entry" });
   }
 }
 
-// Funzione per aggiornare un entry
+// PUT /api/entry/[id]
 async function updateEntry(req: NextApiRequest, res: NextApiResponse) {
-  // Validazione API key
+  // API key validation
   const apiKeyValidation = validateApiKey(req.headers);
   if (!apiKeyValidation.success) {
     return res.status(401).json({ error: apiKeyValidation.error });
   }
 
-  // Validazione ID
+  // ID validation
   const { success, data, error } = validateId({ id: req.query.id });
   if (!success) {
     return res.status(400).json({ error });
   }
   const id = data;
 
-  // Valida i dati della richiesta
+  // Validate request data
   const result = entrySchema.safeParse(req.body);
   if (!result.success) {
     return res.status(400).json({ error: result.error.errors });
@@ -84,20 +84,20 @@ async function updateEntry(req: NextApiRequest, res: NextApiResponse) {
     handleError({
       res,
       error,
-      message: "Errore nell'aggiornamento dell'Entry",
+      message: "Error updating the entry",
     });
   }
 }
 
-// Funzione per eliminare un entry
+// DELETE /api/entry/[id]
 async function deleteEntry(req: NextApiRequest, res: NextApiResponse) {
-  // Validazione API key
+  // API key validation
   const apiKeyValidation = validateApiKey(req.headers);
   if (!apiKeyValidation.success) {
     return res.status(401).json({ error: apiKeyValidation.error });
   }
 
-  // Validazione ID
+  // ID validation
   const { success, data, error } = validateId({ id: req.query.id });
   if (!success) {
     return res.status(400).json({ error });
@@ -108,8 +108,8 @@ async function deleteEntry(req: NextApiRequest, res: NextApiResponse) {
     await prisma.entry.delete({
       where: { id },
     });
-    res.status(200).json({ message: "Entry eliminata con successo" });
+    res.status(200).json({ message: "Entry successfully deleted" });
   } catch (error) {
-    handleError({ res, error, message: "Errore nell'eliminazione dell'Entry" });
+    handleError({ res, error, message: "Error deleting the entry" });
   }
 }

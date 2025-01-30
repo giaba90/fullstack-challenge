@@ -15,16 +15,16 @@ export default async function handler(
     case "DELETE":
       return deleteEntryDetail(req, res);
     default:
-      res.status(405).json({ error: "Metodo non consentito" });
+      res.status(405).json({ error: "Method not allowed" });
   }
 }
 
-// POST /api/entrydetail/[id]
+// GET /api/entrydetail/[id]
 export async function getEntryDetail(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  // Validazione API key
+  // API key validation
   const apiKeyValidation = validateApiKey(req.headers);
   if (!apiKeyValidation.success) {
     return res.status(401).json({ error: apiKeyValidation.error });
@@ -50,14 +50,14 @@ export async function getEntryDetail(
       },
     });
     if (!entryDetail) {
-      return res.status(404).json({ error: "EntryDetail non trovato" });
+      return res.status(404).json({ error: "EntryDetail not found" });
     }
     res.status(200).json(entryDetail);
   } catch (error) {
     handleError({
       res,
       error,
-      message: "Errore nel recupero dell'EntryDetail",
+      message: "Error retrieving EntryDetail",
     });
   }
 }
@@ -67,7 +67,7 @@ export async function updateEntryDetail(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  // Validazione API key
+  // API key validation
   const apiKeyValidation = validateApiKey(req.headers);
   if (!apiKeyValidation.success) {
     return res.status(401).json({ error: apiKeyValidation.error });
@@ -79,7 +79,7 @@ export async function updateEntryDetail(
   }
   const id = data;
 
-  // Valida i dati della richiesta
+  // Validate request data
   const result = entryDetailSchema.safeParse(req.body);
   if (!result.success) {
     return res.status(400).json({ error: result.error.errors });
@@ -97,8 +97,8 @@ export async function updateEntryDetail(
         device,
         isDangerous,
         tags: {
-          deleteMany: {}, // Elimina i tag esistenti
-          create: tags, // Aggiungi i nuovi tag
+          deleteMany: {}, // Delete existing tags
+          create: tags, // Add new tags
         },
       },
     });
@@ -107,7 +107,7 @@ export async function updateEntryDetail(
     handleError({
       res,
       error,
-      message: "Errore nell'aggiornamento dell'EntryDetail",
+      message: "Error updating EntryDetail",
     });
   }
 }
@@ -132,12 +132,12 @@ export async function deleteEntryDetail(
     await prisma.entryDetail.delete({
       where: { id },
     });
-    res.status(200).json({ message: "EntryDetail eliminato con successo" });
+    res.status(200).json({ message: "EntryDetail successfully deleted" });
   } catch (error) {
     handleError({
       res,
       error,
-      message: "Errore nell'eliminazione dell'EntryDetail",
+      message: "Error deleting EntryDetail",
     });
   }
 }
