@@ -18,7 +18,6 @@ type Entry = {
     application_hostname: string;
     timestamp: string;
     type: string;
-    entrydetail: EntryDetailType;
 };
 
 type EntryState = {

@@ -1,5 +1,5 @@
 import type React from "react";
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 import type { EntriesContextType, Entry } from "../state/types/entries";
 
 const EntriesContext = createContext<EntriesContextType | undefined>(undefined);
@@ -7,35 +7,28 @@ const EntriesContext = createContext<EntriesContextType | undefined>(undefined);
 export const EntriesProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [entries, setEntries] = useState<Entry[]>([
-    {
-      id: 1,
-      application_hostname: "app1.example.com",
-      timestamp: "2023-05-01 10:00:00",
-      type: "access",
-      user: "john.doe@example.com",
-      country: "Italy",
-      ip: "192.168.1.1",
-      device: "iPhone",
-      tags: [
-        {
-          title: "OK",
-          description: "This is a description for OK tag",
-          color: "#6EB72F",
-        },
-        {
-          title: "NEW",
-          description:
-            "This is a NEW tag and it appears because loren ipsum dolor sit amet",
-          color: "#026FBC",
-        },
-      ],
-      isDangerous: false,
-    },
-    // Aggiungi altri entries come necessario
-  ]);
+  const [entries, setEntries] = useState<Entry[]>([]);
   const [selectedEntry, setSelectedEntry] = useState<Entry | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [isSelectedEntry, setIsSelectedEntry] = useState(false);
+
+  useEffect(() => {
+    const fetchEntries = async () => {
+      try {
+        const response = await fetch('/api/entry', {
+          headers: {
+            'x-api-key': '1234567890'
+          }
+        });
+        const data = await response.json();
+        setEntries(data);
+      } catch (error) {
+        console.error('Failed to fetch entries:', error);
+      }
+    };
+
+    fetchEntries();
+  }, []);
 
   const addEntry = (newEntry: Omit<Entry, "id">) => {
     const id = Math.max(...entries.map((e) => e.id), 0) + 1;
@@ -61,6 +54,8 @@ export const EntriesProvider: React.FC<{ children: React.ReactNode }> = ({
     <EntriesContext.Provider
       value={{
         entries,
+        isSelectedEntry,
+        setIsSelectedEntry,
         selectedEntry,
         setSelectedEntry,
         addEntry,

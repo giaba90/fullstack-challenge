@@ -2,21 +2,18 @@ import React, { useEffect, useState } from "react";
 import { useEntries } from "@/context/EntriesContext";
 import EntryDetail from "./entries/EntryDetail";
 import EntryEditForm from "./entries/EntryEditForm";
-import { Entry, EntryDetailType } from "@/state/types/entries";
+import { EntryDetailType } from "@/state/types/entries";
 
 const MainContent: React.FC = () => {
   const {
     selectedEntry,
     isEditing,
-    setIsEditingContext,
+    isSelectedEntry,
+    setIsSelectEntry,
     setSelectedEntry,
     updateEntry,
   } = useEntries();
-  const [formData, setFormData] = useState<Entry>({
-    id: 0,
-    application_hostname: "",
-    timestamp: "",
-    type: "",
+  const [formData, setFormData] = useState<EntryDetailType>({
     user: "",
     country: "",
     ip: "",
@@ -34,17 +31,13 @@ const MainContent: React.FC = () => {
 
   // Set form data when an entry is selected
   useEffect(() => {
-    if (selectedEntry) {
+    if (isSelectedEntry) {
       setFormData(selectedEntry);
     }
   }, [selectedEntry]);
 
   const resetFormData = () => {
     setFormData({
-      id: 0,
-      application_hostname: "",
-      timestamp: "",
-      type: "",
       user: "",
       country: "",
       ip: "",
