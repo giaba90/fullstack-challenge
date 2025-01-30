@@ -1,19 +1,46 @@
-import { useState, useEffect } from "react";
-import { useEntries } from "../context/EntriesContext";
-import type { Entry } from "../state/types/entries";
+import React, { useEffect, useState } from "react";
+import { useEntries } from "@/context/EntriesContext";
 import EntryDetail from "./entries/EntryDetail";
-import { EntryEditForm } from "./entries/EntryEditForm";
+import EntryEditForm from "./entries/EntryEditForm";
+import { Entry } from "@/state/types/entries";
 
-export default function MainContent() {
+const MainContent: React.FC = () => {
   const {
     selectedEntry,
-    updateEntry,
-    setSelectedEntry,
-    setIsEditing: setIsEditingContext,
     isEditing,
+    setIsEditingContext,
+    setSelectedEntry,
+    updateEntry,
   } = useEntries();
-  const [formData, setFormData] = useState<Entry>(
-    selectedEntry || {
+  const [formData, setFormData] = useState<Entry>({
+    id: 0,
+    application_hostname: "",
+    timestamp: "",
+    type: "",
+    user: "",
+    country: "",
+    ip: "",
+    device: "",
+    tags: [{ title: "", description: "", color: "" }],
+    isDangerous: false,
+  });
+
+  // Reset form data when no entry is selected and not in editing mode
+  useEffect(() => {
+    if (!selectedEntry && !isEditing) {
+      resetFormData();
+    }
+  }, [selectedEntry, isEditing]);
+
+  // Set form data when an entry is selected
+  useEffect(() => {
+    if (selectedEntry) {
+      setFormData(selectedEntry);
+    }
+  }, [selectedEntry]);
+
+  const resetFormData = () => {
+    setFormData({
       id: 0,
       application_hostname: "",
       timestamp: "",
@@ -22,33 +49,10 @@ export default function MainContent() {
       country: "",
       ip: "",
       device: "",
-      tags: [],
+      tags: [{ title: "", description: "", color: "" }],
       isDangerous: false,
-    }
-  );
-
-  useEffect(() => {
-    if (!selectedEntry && !isEditing) {
-      setFormData({
-        id: 0,
-        application_hostname: "",
-        timestamp: "",
-        type: "",
-        user: "",
-        country: "",
-        ip: "",
-        device: "",
-        tags: [],
-        isDangerous: false,
-      });
-    }
-  }, [selectedEntry, isEditing]);
-
-  useEffect(() => {
-    if (selectedEntry) {
-      setFormData(selectedEntry);
-    }
-  }, [selectedEntry]);
+    });
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,26 +62,17 @@ export default function MainContent() {
     setIsEditingContext(false);
   };
 
+  const handleCloseForm = () => {
+    resetFormData();
+    setIsEditingContext(false);
+    setSelectedEntry(null);
+  };
+
   if (isEditing || selectedEntry) {
     return (
       <main className="w-2/4 p-8 bg-white shadow-md ml-4 relative">
         <button
-          onClick={() => {
-            setFormData({
-              id: 0,
-              application_hostname: "",
-              timestamp: "",
-              type: "",
-              user: "",
-              country: "",
-              ip: "",
-              device: "",
-              tags: [],
-              isDangerous: false,
-            });
-            setIsEditingContext(false);
-            setSelectedEntry(null);
-          }}
+          onClick={handleCloseForm}
           className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 focus:outline-none"
           aria-label="Close form"
         >
@@ -152,4 +147,6 @@ export default function MainContent() {
       </p>
     </main>
   );
-}
+};
+
+export default MainContent;
