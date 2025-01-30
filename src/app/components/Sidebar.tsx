@@ -9,6 +9,8 @@ const ENTRY_TYPES = ['WEB', 'MOBILE'] as const;
 export default function Sidebar() {
   const { entries, setSelectedEntry, deleteEntry, setIsEditing, addEntry } = useEntries();
   const [showNewForm, setShowNewForm] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [editingEntry, setEditingEntry] = useState<Entry | null>(null);
   const [newEntry, setNewEntry] = useState<Entry>({
     id: 0,
     application_hostname: '',
@@ -47,10 +49,25 @@ export default function Sidebar() {
     }));
   };
 
+  const handleEditClick = (entry: Entry, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setEditingEntry(entry);
+    setShowEditForm(true);
+  };
+
+  const handleEditSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (editingEntry) {
+      updateEntry(editingEntry.id, editingEntry);
+    }
+    setShowEditForm(false);
+    setEditingEntry(null);
+  };
+
   return (
     <aside className="w-2/4 bg-white shadow-md p-4 overflow-y-auto">
       <section className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-semibold">Entries</h2>
+        <h2 className="text-lg font-semibold">List Entries</h2>
         <button
           onClick={handleNewEntry}
           className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -91,6 +108,55 @@ export default function Sidebar() {
               <button
                 type="button"
                 onClick={() => setShowNewForm(false)}
+                className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </form>
+      ) : null}
+
+      {showEditForm && editingEntry ? (
+        <form onSubmit={handleEditSubmit} className="mb-4 p-4 border rounded-lg">
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Hostname</label>
+              <input
+                type="text"
+                name="application_hostname"
+                value={editingEntry.application_hostname}
+                onChange={(e) => setEditingEntry({ ...editingEntry, application_hostname: e.target.value })}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Type</label>
+              <select
+                name="type"
+                value={editingEntry.type}
+                onChange={(e) => setEditingEntry({ ...editingEntry, type: e.target.value })}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              >
+                <option value="">Select type</option>
+                {ENTRY_TYPES.map(type => (
+                  <option key={type} value={type}>{type}</option>
+                ))}
+              </select>
+            </div>
+            <div className="flex justify-end space-x-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowEditForm(false);
+                  setEditingEntry(null);
+                }}
                 className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 Cancel
@@ -149,10 +215,7 @@ export default function Sidebar() {
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   <button
                     className="text-indigo-600 hover:text-indigo-900 mr-2"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedEntry(entry);
-                    }}
+                    onClick={(e) => handleEditClick(entry, e)}
                   >
                     <PencilIcon className="h-5 w-5" />
                   </button>
