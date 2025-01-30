@@ -32,11 +32,14 @@ type EntryState = {
     newEntry: Entry;
 };
 
+type ValidationError = {
+    [key: string]: string[] | undefined;
+};
+
 type EntriesContextType = {
     entries: Entry[];
     selectedEntry: Entry | null;
     setSelectedEntry: (entry: Entry | null) => void;
-    addEntry: (entry: Omit<Entry, "id">) => void;
     updateEntry: (id: number, updatedEntry: Partial<Entry>) => void;
     deleteEntry: (id: number) => void;
     setIsEditing: (isEditing: boolean) => void;
@@ -54,4 +57,4 @@ type EntryAction =
     | { type: 'UPDATE_ENTRY'; payload: { id: number; entry: Partial<Entry> } }
     | { type: 'DELETE_ENTRY'; payload: number };
 
-export type { Entry, EntryDetailType, EntryAction, EntriesContextType, EntryState };
+export type { Entry, ValidationError, EntryDetailType, EntryAction, EntriesContextType, EntryState };

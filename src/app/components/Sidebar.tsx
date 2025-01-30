@@ -2,10 +2,10 @@ import { useReducer } from "react";
 import { useEntries } from "../context/EntriesContext";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { EntryTable } from "./entries/EntryTable";
-import { EntryForm } from "./entries/EntryForm";
 import { entriesReducer, initialState } from "../state/reducers/entriesReducer";
 import { Entry } from "@/state/types/entries";
 import { useEffect, useState } from "react";
+import { EntryNewForm } from "./entries/EntryNewForm";
 
 
 export default function Sidebar() {/*
@@ -57,8 +57,6 @@ export default function Sidebar() {/*
   };*/
   const [entries, setEntries] = useState<Entry[]>([]);
   const [showNewForm, setShowNewForm] = useState<boolean>(false);
-  const [showEditForm, setShowEditForm] = useState<boolean>(false);
-  const [editingEntry, setEditingEntry] = useState<Entry | null>(null);
 
   useEffect(() => {
     const fetchEntries = async () => {
@@ -78,14 +76,6 @@ export default function Sidebar() {/*
     fetchEntries();
   }, []);
 
-
-  const handleSubmitNew = () => { }
-  const handleSelectEntry = () => { }
-  const handleEditClick = () => { }
-  const handleDelete = () => {
-
-  }
-
   return (
     <aside className="w-2/4 bg-white shadow-md p-4 overflow-y-auto">
       <section className="flex justify-between items-center mb-4">
@@ -100,39 +90,14 @@ export default function Sidebar() {/*
       </section>
 
       {showNewForm && (
-        <EntryForm
-          entry={editingEntry}
-          onSubmit={handleSubmitNew}
-          onChange={(entry) => setEditingEntry(entry)}
-          onCancel={() => setShowNewForm(false)}
-          submitLabel="Create"
-        />
-      )}
-
-      {showEditForm && editingEntry && (
-        <EntryForm
-          entry={editingEntry}
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (editingEntry) {
-              // Handle update
-            }
-          }}
-          onChange={(entry) => setEditingEntry(entry)}
-          onCancel={() => {
-            setShowEditForm(false);
-            setEditingEntry(null);
-          }}
+        <EntryNewForm
+          isOpen={showNewForm}
+          onClose={() => setShowNewForm(false)}
         />
       )}
 
       {entries.length > 0 ? (
-        <EntryTable
-          entries={entries}
-        //      onSelect={handleSelectEntry}
-        //     onEdit={handleEditClick}
-        //    onDelete={handleDelete}
-        />
+        <EntryTable entries={entries} />
       ) : (
         <p className="text-gray-500 text-center py-4">No entries</p>
       )}

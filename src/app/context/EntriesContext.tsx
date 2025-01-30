@@ -30,10 +30,6 @@ export const EntriesProvider: React.FC<{ children: React.ReactNode }> = ({
       fetchEntries();
     }, []);*/
 
-  const addEntry = (newEntry: Omit<Entry, "id">) => {
-    const id = Math.max(...entries.map((e) => e.id), 0) + 1;
-    setEntries([...entries, { ...newEntry, id }]);
-  };
 
   const updateEntry = (id: number, updatedEntry: Partial<Entry>) => {
     setEntries(
@@ -56,7 +52,6 @@ export const EntriesProvider: React.FC<{ children: React.ReactNode }> = ({
         entries,
         selectedEntry,
         setSelectedEntry,
-        addEntry,
         updateEntry,
         deleteEntry,
         setIsEditing,
