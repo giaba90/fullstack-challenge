@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useEntries } from "../context/EntriesContext";
 import type { Entry } from "../context/EntriesContext";
 
-const ENTRY_TYPES = ['WEB', 'MOBILE'] as const;
 
 export default function MainContent() {
   const { selectedEntry, updateEntry, setSelectedEntry, setIsEditing: setIsEditingContext, isEditing } = useEntries();
