@@ -13,13 +13,13 @@ export default async function handler(
     case "POST":
       return createEntryDetail(req, res);
     default:
-      res.status(405).json({ error: "Metodo non consentito" });
+      res.status(405).json({ error: "Method not allowed" });
   }
 }
 
 // GET /api/entryDetail
 async function getEntryDetails(req: NextApiRequest, res: NextApiResponse) {
-  // Validazione API key
+  // API key validation
   const apiKeyValidation = validateApiKey(req.headers);
   if (!apiKeyValidation.success) {
     return res.status(401).json({ error: apiKeyValidation.error });
@@ -42,7 +42,7 @@ async function getEntryDetails(req: NextApiRequest, res: NextApiResponse) {
     handleError({
       res,
       error,
-      message: "Errore nel recupero degli EntryDetails",
+      message: "Error retrieving EntryDetails",
     });
   }
 }
@@ -80,7 +80,7 @@ async function createEntryDetail(req: NextApiRequest, res: NextApiResponse) {
     handleError({
       res,
       error,
-      message: "Errore nella creazione dell'EntryDetail",
+      message: "Error creating EntryDetail",
     });
   }
 }

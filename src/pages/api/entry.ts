@@ -12,13 +12,13 @@ export default async function handler(
   } else if (req.method === "POST") {
     return createEntry(req, res);
   } else {
-    res.status(405).json({ error: "Metodo non consentito" });
+    res.status(405).json({ error: "Method not allowed" });
   }
 }
 
 // GET /api/entry
 export async function getEntries(req: NextApiRequest, res: NextApiResponse) {
-  // Validazione API key
+  // API key validation
   const apiKeyValidation = validateApiKey(req.headers);
   if (!apiKeyValidation.success) {
     return res.status(401).json({ error: apiKeyValidation.error });
@@ -28,7 +28,7 @@ export async function getEntries(req: NextApiRequest, res: NextApiResponse) {
     const entries = await prisma.entry.findMany();
     res.status(200).json(entries);
   } catch (error) {
-    handleError({ res, error, message: "Errore nella ricerca delle Entry" });
+    handleError({ res, error, message: "Error fetching entries" });
   }
 }
 // POST /api/entry
@@ -56,6 +56,6 @@ export async function createEntry(req: NextApiRequest, res: NextApiResponse) {
     });
     res.status(201).json(entry);
   } catch (error) {
-    handleError({ res, error, message: "Errore nella creazione della Entry" });
+    handleError({ res, error, message: "Error creating entry" });
   }
 }
