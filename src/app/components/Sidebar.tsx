@@ -1,59 +1,46 @@
-import { useState } from "react";
-import { useEntries } from "../context/EntriesContext";
+import { useReducer } from "react";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { EntryTable } from "./entries/EntryTable";
 import { EntryForm } from "./entries/EntryForm";
+import { entriesReducer, initialState } from "../reducers/entriesReducer";
 import type { Entry } from "../context/EntriesContext";
 
 export default function Sidebar() {
-  const { entries, setSelectedEntry, deleteEntry, setIsEditing, addEntry, updateEntry } = useEntries();
-  const [showNewForm, setShowNewForm] = useState(false);
-  const [showEditForm, setShowEditForm] = useState(false);
-  const [editingEntry, setEditingEntry] = useState<Entry | null>(null);
-  const [newEntry, setNewEntry] = useState<Entry>({
-    id: 0,
-    application_hostname: '',
-    timestamp: '',
-    type: '',
-    user: '',
-    country: '',
-    ip: '',
-    device: '',
-    tags: [],
-    isDangerous: false
-  });
+  const [state, dispatch] = useReducer(entriesReducer, initialState);
+  const { entries, showNewForm, showEditForm, editingEntry, newEntry } = state;
 
   const handleDelete = (id: number, e: React.MouseEvent) => {
     e.stopPropagation();
     if (window.confirm("Are you sure you want to delete this entry?")) {
-      deleteEntry(id);
+      dispatch({ type: 'DELETE_ENTRY', payload: id });
     }
   };
 
   const handleNewEntry = () => {
-    setShowNewForm(true);
-    setSelectedEntry(null);
+    dispatch({ type: 'SET_SHOW_NEW_FORM', payload: true });
+    dispatch({ type: 'SET_SELECTED_ENTRY', payload: null });
   };
 
   const handleSubmitNew = (e: React.FormEvent) => {
     e.preventDefault();
-    addEntry(newEntry);
-    setShowNewForm(false);
+    const id = Math.max(...entries.map(e => e.id), 0) + 1;
+    dispatch({ type: 'ADD_ENTRY', payload: { ...newEntry, id } });
   };
 
   const handleEditClick = (entry: Entry, e: React.MouseEvent) => {
     e.stopPropagation();
-    setEditingEntry(entry);
-    setShowEditForm(true);
+    dispatch({ type: 'SET_EDITING_ENTRY', payload: entry });
+    dispatch({ type: 'SET_SHOW_EDIT_FORM', payload: true });
   };
 
   const handleEditSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (editingEntry) {
-      updateEntry(editingEntry.id, editingEntry);
+      dispatch({
+        type: 'UPDATE_ENTRY',
+        payload: { id: editingEntry.id, entry: editingEntry }
+      });
     }
-    setShowEditForm(false);
-    setEditingEntry(null);
   };
 
   return (
@@ -73,8 +60,8 @@ export default function Sidebar() {
         <EntryForm
           entry={newEntry}
           onSubmit={handleSubmitNew}
-          onChange={setNewEntry}
-          onCancel={() => setShowNewForm(false)}
+          onChange={(entry) => dispatch({ type: 'UPDATE_NEW_ENTRY', payload: entry })}
+          onCancel={() => dispatch({ type: 'SET_SHOW_NEW_FORM', payload: false })}
           submitLabel="Create"
         />
       )}
@@ -83,10 +70,10 @@ export default function Sidebar() {
         <EntryForm
           entry={editingEntry}
           onSubmit={handleEditSubmit}
-          onChange={setEditingEntry}
+          onChange={(entry) => dispatch({ type: 'SET_EDITING_ENTRY', payload: entry })}
           onCancel={() => {
-            setShowEditForm(false);
-            setEditingEntry(null);
+            dispatch({ type: 'SET_SHOW_EDIT_FORM', payload: false });
+            dispatch({ type: 'SET_EDITING_ENTRY', payload: null });
           }}
         />
       )}
@@ -94,7 +81,7 @@ export default function Sidebar() {
       {entries.length > 0 ? (
         <EntryTable
           entries={entries}
-          onSelect={setSelectedEntry}
+          onSelect={(entry) => dispatch({ type: 'SET_SELECTED_ENTRY', payload: entry })}
           onEdit={handleEditClick}
           onDelete={handleDelete}
         />
