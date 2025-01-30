@@ -102,7 +102,7 @@ export function EntryNewForm({ isOpen, onClose }: EntryNewFormProps) {
                                 <p key={index} className="mt-1 text-sm text-red-600">{error}</p>
                             ))}
                         </div>
-                        <div className="flex justify-end space-x-3 mt-6">
+                        <div className="flex justify-between mt-6">
                             <button
                                 type="button"
                                 onClick={onClose}

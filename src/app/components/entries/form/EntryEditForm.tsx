@@ -1,5 +1,5 @@
-import type { Entry } from '../../state/types/entries';
-import { ENTRY_TYPES } from '../../state/types/entries';
+import type { Entry } from '../../../state/types/entries';
+import { ENTRY_TYPES } from '../../../state/types/entries';
 
 interface EntryFormProps {
     entry: Entry;
