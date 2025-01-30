@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import { useEntries } from "../context/EntriesContext";
 import type { Entry } from "../context/EntriesContext";
 
+const ENTRY_TYPES = ['WEB', 'MOBILE'] as const;
+
 export default function MainContent() {
-  const { selectedEntry, updateEntry, addEntry, setSelectedEntry } = useEntries();
+  const { selectedEntry, updateEntry, setSelectedEntry, setIsEditing: setIsEditingContext } = useEntries();
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState<Entry>({
+  const [formData, setFormData] = useState<Entry>(selectedEntry || {
     id: 0,
     application_hostname: '',
     timestamp: '',
@@ -21,11 +23,9 @@ export default function MainContent() {
   useEffect(() => {
     if (selectedEntry) {
       setFormData(selectedEntry);
-      setIsEditing(false);
+      setIsEditingContext(false);
     }
-  }, [selectedEntry]);
-
-
+  }, [selectedEntry, setIsEditingContext]);
 
   useEffect(() => {
     if (!selectedEntry && !isEditing) {
@@ -67,10 +67,8 @@ export default function MainContent() {
     e.preventDefault();
     if (selectedEntry) {
       updateEntry(selectedEntry.id, formData);
-    } else {
-      addEntry(formData as any);
     }
-    setIsEditing(false);
+    setIsEditingContext(false);
   };
 
   const shouldShowForm = selectedEntry || isEditing;
@@ -101,7 +99,7 @@ export default function MainContent() {
             tags: [],
             isDangerous: false
           });
-          setIsEditing(false);
+          setIsEditingContext(false);
           setSelectedEntry(null);
         }}
         className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 focus:outline-none"
@@ -124,7 +122,7 @@ export default function MainContent() {
         {isEditing
           ? selectedEntry
             ? "Edit Entry"
-            : "New Entry"
+            : ""
           : "Entry Details"}
       </h2>
       {isEditing ? (
@@ -152,14 +150,18 @@ export default function MainContent() {
             >
               Type
             </label>
-            <input
-              type="text"
+            <select
               id="type"
               name="type"
               value={formData.type || ""}
               onChange={handleInputChange}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            />
+            >
+              <option value="">Select type</option>
+              {ENTRY_TYPES.map(type => (
+                <option key={type} value={type}>{type}</option>
+              ))}
+            </select>
           </div>
           <div>
             <label
@@ -259,7 +261,7 @@ export default function MainContent() {
           <div className="flex justify-end space-x-3">
             <button
               type="button"
-              onClick={() => setIsEditing(false)}
+              onClick={() => setIsEditingContext(false)}
               className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               Cancel
@@ -315,7 +317,7 @@ export default function MainContent() {
       )}
       {!isEditing && (
         <button
-          onClick={() => setIsEditing(true)}
+          onClick={() => setIsEditingContext(true)}
           className="mt-4 px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
           Edit
