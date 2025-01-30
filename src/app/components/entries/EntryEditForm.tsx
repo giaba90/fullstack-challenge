@@ -1,9 +1,9 @@
-import type { Entry } from "../../state/types/entries";
+import type { EntryDetailType } from "../../state/types/entries";
 
 interface EntryEditFormProps {
-  entry: Entry;
+  entry: EntryDetailType;
   onSubmit: (e: React.FormEvent) => void;
-  onChange: (entry: Entry) => void;
+  onChange: (entry: EntryDetailType) => void;
   onCancel: () => void;
   submitLabel?: string;
 }
