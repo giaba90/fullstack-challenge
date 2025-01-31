@@ -1,4 +1,4 @@
-import type { EntryDetailType } from "../../state/types/entries";
+import type { EntryDetailType } from "../../../state/types/entries";
 
 interface EntryEditFormProps {
   entry: EntryDetailType;
@@ -8,7 +8,7 @@ interface EntryEditFormProps {
   submitLabel?: string;
 }
 
-export default function EntryEditForm({
+export default function EntryEditDetailForm({
   entry,
   onSubmit,
   onChange,

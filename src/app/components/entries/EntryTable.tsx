@@ -1,8 +1,7 @@
 import { useState } from "react";
-import type { Entry, EntryDetailType } from "../../state/types/entries";
+import type { Entry } from "../../state/types/entries";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
-import EntryEditForm from "./EntryEditDetailForm";
-import type { FormEvent } from "react";
+import { EntryEditForm } from "./form/EntryEditForm";
 
 interface EntryTableProps {
   entries: Entry[];
@@ -12,10 +11,13 @@ interface EntryTableProps {
 export function EntryTable({ entries, fetchEntries }: EntryTableProps) {
 
   const [showEditForm, setShowEditForm] = useState(false);
-  const [editingEntry, setEditingEntry] = useState<EntryDetailType | null>(null);
+  const [editingEntry, setEditingEntry] = useState<Entry | null>(null);
 
   const onSelect = (value: Entry) => { };
-  const onEdit = (value: Entry) => { };
+  const onEdit = (value: Entry) => {
+    setShowEditForm(true)
+    setEditingEntry(value);
+  };
   const onDelete = async (value: number) => {
     const id = value.toString();
     try {
@@ -39,24 +41,15 @@ export function EntryTable({ entries, fetchEntries }: EntryTableProps) {
   };
 
 
-  /*  if (showEditForm && editingEntry) {
-          return (
-              <EntryEditForm
-                  entry={editingEntry}
-                  onSubmit={(e: FormEvent) => {
-                      e.preventDefault();
-                      if (editingEntry) {
-                          // Handle update
-                      }
-                  }}
-                  onChange={(entry) => setEditingEntry(entry)}
-                  onCancel={() => {
-                      setShowEditForm(false);
-                      setEditingEntry(null);
-                  }}
-              />
-          )
-      }*/
+  if (showEditForm && editingEntry) {
+    return (
+      <EntryEditForm
+        entry={editingEntry}
+        onClose={() => setShowEditForm(false)}
+        fetchEntries={fetchEntries}
+      />
+    )
+  }
 
   return (
     <table className="min-w-full divide-y divide-gray-200">
