@@ -6,12 +6,14 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
-
 model Entry {
-  id                  Int      @id @default(autoincrement())
+  id                  Int         @id @default(autoincrement())
   applicationHostname String
   timestamp           DateTime
   type                String
+
+  entryDetail   EntryDetail? @relation(fields: [entryDetailId], references: [id])
+  entryDetailId Int?         @unique
 }
 
 model EntryDetail {
@@ -22,13 +24,16 @@ model EntryDetail {
   device      String
   isDangerous Boolean
   tags        Tag[]
+
+  entry Entry?
 }
 
 model Tag {
-  id          Int         @id @default(autoincrement())
-  title       String
-  description String
-  color       String
-  entryId     Int
-  entryDetail EntryDetail @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  id            Int         @id @default(autoincrement())
+  title         String
+  description   String
+  color         String
+  entryDetailId Int
+  entryDetail   EntryDetail @relation(fields: [entryDetailId], references: [id])
 }
+
