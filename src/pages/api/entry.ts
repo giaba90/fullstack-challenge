@@ -33,14 +33,12 @@ export async function getEntries(req: NextApiRequest, res: NextApiResponse) {
 }
 // POST /api/entry
 export async function createEntry(req: NextApiRequest, res: NextApiResponse) {
-  // Validazione API key
-  validateApiKey(req.headers);
-  if (!validateApiKey(req.headers).success) {
-    return res.status(401).json({ error: validateApiKey(req.headers).error });
+  const apiKeyValidation = validateApiKey(req.headers);
+  if (!apiKeyValidation.success) {
+    return res.status(401).json({ error: apiKeyValidation.error });
   }
 
   try {
-    // Validation
     const result = entrySchema.safeParse(req.body);
     if (!result.success) {
       return res.status(400).json({ error: result.error.errors });
@@ -54,6 +52,7 @@ export async function createEntry(req: NextApiRequest, res: NextApiResponse) {
         type,
       },
     });
+
     res.status(201).json(entry);
   } catch (error) {
     handleError({ res, error, message: "Error creating entry" });
