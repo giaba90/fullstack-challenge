@@ -11,26 +11,36 @@ interface EntryFormProps {
 
 const entrySchema = z.object({
     applicationHostname: z.string()
-        .min(1, "Hostname is required")
+        .min(1, "Hostname is required"),
+    type: z.enum(ENTRY_TYPES, {
+        errorMap: () => ({ message: "Please select a valid type" })
+    })
 });
 
 export function EntryEditForm({ entry, onClose, fetchEntries }: EntryFormProps) {
-
+    const [formData, setFormData] = useState(entry);
     const [errors, setErrors] = useState<ValidationError>({});
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const formData = new FormData(e.currentTarget);
         const entryData = {
-            applicationHostname: formData.get('applicationHostname'),
-            type: formData.get('type'),
+            applicationHostname: formData.applicationHostname,
+            type: formData.type,
         };
 
         try {
             // Validate the data
             const validatedData = entrySchema.parse(entryData);
 
-            const response = await fetch('/api/entry', {
+            const response = await fetch(`/api/entry/${entry.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -66,15 +76,20 @@ export function EntryEditForm({ entry, onClose, fetchEntries }: EntryFormProps) 
                     <input
                         type="text"
                         name="applicationHostname"
-                        value={entry.applicationHostname}
+                        value={formData.applicationHostname}
+                        onChange={handleChange}
                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     />
+                    {errors.applicationHostname?.map((error, index) => (
+                        <p key={index} className="mt-1 text-sm text-red-600">{error}</p>
+                    ))}
                 </div>
                 <div>
                     <label className="block text-sm font-medium text-gray-700">Type</label>
                     <select
                         name="type"
-                        value={entry.type}
+                        value={formData.type}
+                        onChange={handleChange}
                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     >
                         <option value="">Select type</option>
@@ -82,6 +97,9 @@ export function EntryEditForm({ entry, onClose, fetchEntries }: EntryFormProps) 
                             <option key={type} value={type}>{type}</option>
                         ))}
                     </select>
+                    {errors.type?.map((error, index) => (
+                        <p key={index} className="mt-1 text-sm text-red-600">{error}</p>
+                    ))}
                 </div>
                 <div className="flex justify-end space-x-3">
                     <button
