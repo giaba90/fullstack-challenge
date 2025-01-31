@@ -155,7 +155,7 @@ export default function MainContent() {
   }, []);
 
   return (
-    <main className="p-8 bg-white shadow-md ml-4 w-full">
+    <main className="p-8 bg-white shadow-md w-full">
       <section className="flex items-center mb-4 justify-end">
         <button
           onClick={() => setShowNewForm(true)}

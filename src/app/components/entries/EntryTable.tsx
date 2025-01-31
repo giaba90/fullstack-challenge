@@ -11,7 +11,28 @@ interface EntryTableProps {
 export function EntryTable({ entries }: EntryTableProps) {
     const onSelect = (value: Entry) => { }
     const onEdit = (value: Entry) => { }
-    const onDelete = (value: number) => { }
+    const onDelete = (value: number) => {
+        const id = value.toString();
+        fetch(`/api/entry/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': '1234567890'
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Entry deleted:', data);
+            })
+            .catch(error => {
+                console.error('Error deleting entry:', error);
+            });
+    }
 
     const [showEditForm, setShowEditForm] = useState(false);
     const [editingEntry, setEditingEntry] = useState<EntryDetailType | null>(null);
@@ -53,10 +74,10 @@ export function EntryTable({ entries }: EntryTableProps) {
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{entry.timestamp}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{entry.type}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <button className="text-indigo-600 hover:text-indigo-900 mr-2" onClick={(e) => onEdit(entry)}>
+                            <button className="text-indigo-600 hover:text-indigo-900 mr-2" onClick={() => onEdit(entry)}>
                                 <PencilIcon className="h-5 w-5" />
                             </button>
-                            <button className="text-red-600 hover:text-red-900" onClick={(e) => onDelete(entry.id)}>
+                            <button className="text-red-600 hover:text-red-900" onClick={() => onDelete(entry.id)}>
                                 <TrashIcon className="h-5 w-5" />
                             </button>
                         </td>
