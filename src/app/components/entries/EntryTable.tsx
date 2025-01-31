@@ -6,9 +6,10 @@ import type { FormEvent } from "react";
 
 interface EntryTableProps {
   entries: Entry[];
+  fetchEntries: () => void;
 }
 
-export function EntryTable({ entries }: EntryTableProps) {
+export function EntryTable({ entries, fetchEntries }: EntryTableProps) {
   const onSelect = (value: Entry) => { };
   const onEdit = (value: Entry) => { };
   const onDelete = async (value: number) => {
@@ -22,7 +23,8 @@ export function EntryTable({ entries }: EntryTableProps) {
         },
       })
       if (response.ok) {
-        alert('Entry eliminated')
+        alert('Entry eliminated');
+        fetchEntries();
       } else {
         alert('Failed to delete entry')
         console.error('Failed to delete entry:', response.status);

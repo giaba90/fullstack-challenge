@@ -9,22 +9,22 @@ export default function MainContent() {
   const [entries, setEntries] = useState<Entry[]>([]);
   const [showNewForm, setShowNewForm] = useState<boolean>(false);
 
-  useEffect(() => {
-    const fetchEntries = async () => {
-      try {
-        const response = await fetch('/api/entry', {
-          headers: {
-            'x-api-key': '1234567890'
-          }
-        });
-        const data = await response.json();
-        setEntries(data);
-      } catch (error) {
-        console.error('Failed to fetch entries:', error);
-      }
-    };
+  const fetchEntries = async () => {
+    try {
+      const response = await fetch("/api/entry", {
+        headers: {
+          "x-api-key": "1234567890",
+        },
+      });
+      const data = await response.json();
+      setEntries(data);
+    } catch (error) {
+      console.error("Failed to fetch entries:", error);
+    }
+  };
 
-    fetchEntries();
+  useEffect(() => {
+    fetchEntries(); // Eseguito solo al mount
   }, []);
 
   return (
@@ -41,12 +41,13 @@ export default function MainContent() {
           <EntryNewForm
             isOpen={showNewForm}
             onClose={() => setShowNewForm(false)}
+            fetchEntries={fetchEntries}
           />
         )}
       </section>
       <h2 className="text-lg font-semibold">List Entries</h2>
       {entries.length > 0 ? (
-        <EntryTable entries={entries} />
+        <EntryTable entries={entries} fetchEntries={fetchEntries} />
       ) : (
         <p className="text-gray-500 text-center py-4">No entries</p>
       )}

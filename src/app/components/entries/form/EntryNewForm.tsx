@@ -7,6 +7,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 interface EntryNewFormProps {
     isOpen: boolean;
     onClose: () => void;
+    fetchEntries: () => void;
 }
 
 const entrySchema = z.object({
@@ -17,7 +18,7 @@ const entrySchema = z.object({
     })
 });
 
-export function EntryNewForm({ isOpen, onClose }: EntryNewFormProps) {
+export function EntryNewForm({ isOpen, onClose, fetchEntries }: EntryNewFormProps) {
     const [errors, setErrors] = useState<ValidationError>({});
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -45,6 +46,7 @@ export function EntryNewForm({ isOpen, onClose }: EntryNewFormProps) {
                 alert('New entry saved successfully!');
                 setErrors({});
                 onClose();
+                fetchEntries();
             } else {
                 alert('Failed to save new entry')
                 console.error('Failed to save new entry:', response.status);
