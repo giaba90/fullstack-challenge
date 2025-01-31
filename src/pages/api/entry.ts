@@ -7,12 +7,13 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method === "GET") {
-    return getEntries(req, res);
-  } else if (req.method === "POST") {
-    return createEntry(req, res);
-  } else {
-    res.status(405).json({ error: "Method not allowed" });
+  switch (req.method) {
+    case "GET":
+      return getEntries(req, res);
+    case "POST":
+      return createEntry(req, res);
+    default:
+      res.status(405).json({ error: "Method not allowed" });
   }
 }
 
