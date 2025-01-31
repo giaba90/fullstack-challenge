@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import prisma from "@/prisma/client";
+import { prisma } from "@/prisma/client";
 import { handleError, validateApiKey } from "@/lib/helper";
 import { entryDetailSchema } from "@/lib/validation";
 
@@ -49,7 +49,6 @@ async function getEntryDetails(req: NextApiRequest, res: NextApiResponse) {
 
 // POST /api/entryDetail
 async function createEntryDetail(req: NextApiRequest, res: NextApiResponse) {
-
   const apiKeyValidation = validateApiKey(req.headers);
   if (!apiKeyValidation.success) {
     return res.status(401).json({ error: apiKeyValidation.error });
