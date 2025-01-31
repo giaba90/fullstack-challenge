@@ -28,7 +28,7 @@ async function getEntry(req: NextApiRequest, res: NextApiResponse) {
   }
 
   // ID validation
-  const { success, data, error } = validateId({ id: req.query.id });
+  const { success, data, error } = validateId({ id: Number(req.query.id) });
   if (!success) {
     return res.status(400).json({ error });
   }
@@ -56,7 +56,7 @@ async function updateEntry(req: NextApiRequest, res: NextApiResponse) {
   }
 
   // ID validation
-  const { success, data, error } = validateId({ id: req.query.id });
+  const { success, data, error } = validateId({ id: Number(req.query.id) });
   if (!success) {
     return res.status(400).json({ error });
   }
@@ -98,7 +98,7 @@ async function deleteEntry(req: NextApiRequest, res: NextApiResponse) {
   }
 
   // ID validation
-  const { success, data, error } = validateId({ id: req.query.id });
+  const { success, data, error } = validateId({ id: Number(req.query.id) });
   if (!success) {
     return res.status(400).json({ error });
   }
