@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { Entry, EntryDetailType } from "../../state/types/entries";
+import type { Entry, EntryDetailType } from "../../lib/types/entries";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { EntryEditForm } from "./form/EntryEditForm";
 import EntryDetail from "./EntryDetail";

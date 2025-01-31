@@ -1,4 +1,4 @@
-import type { EntryDetailType } from "../../../state/types/entries";
+import type { EntryDetailType } from "../../../lib/types/entries";
 
 interface EntryEditFormProps {
   entry: EntryDetailType;

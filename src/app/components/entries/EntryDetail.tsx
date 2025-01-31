@@ -1,4 +1,4 @@
-import { EntryDetailType } from "@/state/types/entries";
+import { EntryDetailType } from "@/lib/types/entries";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import React from "react";
 
