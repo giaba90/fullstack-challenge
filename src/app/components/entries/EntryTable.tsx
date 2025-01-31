@@ -9,32 +9,27 @@ interface EntryTableProps {
 }
 
 export function EntryTable({ entries }: EntryTableProps) {
-  const onSelect = (value: Entry) => {};
-  const onEdit = (value: Entry) => {};
-  const onDelete = (value: number) => {
+  const onSelect = (value: Entry) => { };
+  const onEdit = (value: Entry) => { };
+  const onDelete = async (value: number) => {
     const id = value.toString();
-    fetch(`/api/entry/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": "1234567890",
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
+    try {
+      const response = await fetch(`/api/entry/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": "1234567890",
+        },
       })
-      .then((data) => {
-        alert(data);
-      })
-      .then((data) => {
-        console.log("Entry deleted:", data);
-      })
-      .catch((error) => {
-        console.error("Error deleting entry:", error);
-      });
+      if (response.ok) {
+        alert('Entry eliminated')
+      } else {
+        alert('Failed to delete entry')
+        console.error('Failed to delete entry:', response.status);
+      }
+    } catch (error) {
+      console.error("Error deleting entry:", error);
+    };
   };
 
   const [showEditForm, setShowEditForm] = useState(false);
