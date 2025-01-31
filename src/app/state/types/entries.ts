@@ -4,18 +4,23 @@ type Tag = {
     color: string;
 };
 
-type Entry = {
-    id: number;
-    application_hostname: string;
-    timestamp: string;
-    type: string;
+type EntryDetailType = {
     user: string;
     country: string;
     ip: string;
     device: string;
     tags: Tag[];
     isDangerous: boolean;
+}
+
+type Entry = {
+    id: number;
+    applicationHostname: string;
+    timestamp: string;
+    type: string;
 };
+
+export const ENTRY_TYPES = ['WEB', 'MOBILE'] as const;
 
 type EntryState = {
     entries: Entry[];
@@ -27,11 +32,14 @@ type EntryState = {
     newEntry: Entry;
 };
 
+type ValidationError = {
+    [key: string]: string[] | undefined;
+};
+
 type EntriesContextType = {
     entries: Entry[];
     selectedEntry: Entry | null;
     setSelectedEntry: (entry: Entry | null) => void;
-    addEntry: (entry: Omit<Entry, "id">) => void;
     updateEntry: (id: number, updatedEntry: Partial<Entry>) => void;
     deleteEntry: (id: number) => void;
     setIsEditing: (isEditing: boolean) => void;
@@ -49,4 +57,4 @@ type EntryAction =
     | { type: 'UPDATE_ENTRY'; payload: { id: number; entry: Partial<Entry> } }
     | { type: 'DELETE_ENTRY'; payload: number };
 
-export type { Entry, EntryAction, EntriesContextType, EntryState };
+export type { Entry, ValidationError, EntryDetailType, EntryAction, EntriesContextType, EntryState };

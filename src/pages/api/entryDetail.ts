@@ -49,13 +49,12 @@ async function getEntryDetails(req: NextApiRequest, res: NextApiResponse) {
 
 // POST /api/entryDetail
 async function createEntryDetail(req: NextApiRequest, res: NextApiResponse) {
-  // Validazione API key
+
   const apiKeyValidation = validateApiKey(req.headers);
   if (!apiKeyValidation.success) {
     return res.status(401).json({ error: apiKeyValidation.error });
   }
 
-  // Valida i dati della richiesta
   const result = entryDetailSchema.safeParse(req.body);
   if (!result.success) {
     return res.status(400).json({ error: result.error.errors });

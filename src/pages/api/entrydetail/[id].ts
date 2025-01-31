@@ -30,7 +30,7 @@ export async function getEntryDetail(
     return res.status(401).json({ error: apiKeyValidation.error });
   }
 
-  const { success, data, error } = validateId({ id: req.query.id });
+  const { success, data, error } = validateId({ id: Number(req.query.id) });
   if (!success) {
     return res.status(400).json({ error });
   }
@@ -73,7 +73,7 @@ export async function updateEntryDetail(
     return res.status(401).json({ error: apiKeyValidation.error });
   }
 
-  const { success, data, error } = validateId({ id: req.query.id });
+  const { success, data, error } = validateId({ id: Number(req.query.id) });
   if (!success) {
     return res.status(400).json({ error });
   }
@@ -122,7 +122,7 @@ export async function deleteEntryDetail(
     return res.status(401).json({ error: apiKeyValidation.error });
   }
 
-  const { success, data, error } = validateId({ id: req.query.id });
+  const { success, data, error } = validateId({ id: Number(req.query.id) });
   if (!success) {
     return res.status(400).json({ error });
   }

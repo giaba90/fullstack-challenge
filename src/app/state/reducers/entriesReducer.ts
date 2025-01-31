@@ -2,15 +2,9 @@ import type { Entry, EntryState, EntryAction } from '../types/entries';
 
 const initialEntry: Entry = {
     id: 0,
-    application_hostname: '',
+    applicationHostname: '',
     timestamp: '',
     type: '',
-    user: '',
-    country: '',
-    ip: '',
-    device: '',
-    tags: [],
-    isDangerous: false
 };
 
 export const initialState: EntryState = {
