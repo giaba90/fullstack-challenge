@@ -10,6 +10,10 @@ interface EntryTableProps {
 }
 
 export function EntryTable({ entries, fetchEntries }: EntryTableProps) {
+
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [editingEntry, setEditingEntry] = useState<EntryDetailType | null>(null);
+
   const onSelect = (value: Entry) => { };
   const onEdit = (value: Entry) => { };
   const onDelete = async (value: number) => {
@@ -34,10 +38,7 @@ export function EntryTable({ entries, fetchEntries }: EntryTableProps) {
     };
   };
 
-  const [showEditForm, setShowEditForm] = useState(false);
-  const [editingEntry, setEditingEntry] = useState<EntryDetailType | null>(
-    null
-  );
+
   /*  if (showEditForm && editingEntry) {
           return (
               <EntryEditForm
