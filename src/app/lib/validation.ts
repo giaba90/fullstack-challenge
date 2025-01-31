@@ -10,8 +10,8 @@ const entryDetailSchema = z.object({
     .array(
       z.object({
         title: z.string().nonempty("The title field is required"),
-        description: z.string().optional(),
-        color: z.string().optional(),
+        description: z.string().nonempty("The description field is required"),
+        color: z.string().nonempty("The color field is required"),
       })
     )
     .optional(),
