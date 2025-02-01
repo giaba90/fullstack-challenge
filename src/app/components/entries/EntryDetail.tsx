@@ -6,12 +6,14 @@ import EntryEditDetailForm from "./form/EntryEditDetailForm";
 interface EntryDetailProps {
   entry: EntryDetailType;
   onClose: () => void;
+  setShowEntryDetail: (val: boolean) => void;
   fetchEntries: () => void;
 }
 
 export function EntryDetail({
   entry,
   onClose,
+  setShowEntryDetail,
   fetchEntries,
 }: EntryDetailProps) {
   const [showEditForm, setShowEditForm] = useState(false);
@@ -50,7 +52,10 @@ export function EntryDetail({
     return (
       <EntryEditDetailForm
         entry={entry}
-        onClose={() => setShowEditForm(false)}
+        onClose={() => {
+          setShowEditForm(false);
+          setShowEntryDetail(false);
+        }}
       />
     );
   }

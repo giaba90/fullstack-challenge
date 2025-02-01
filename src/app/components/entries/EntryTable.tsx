@@ -140,6 +140,7 @@ export function EntryTable({ entries, fetchEntries }: EntryTableProps) {
         <EntryDetail
           entry={selectedEntry}
           onClose={() => setShowEntryDetail(false)}
+          setShowEntryDetail={() => setShowEntryDetail(false)}
           fetchEntries={fetchEntries}
         />
       )}

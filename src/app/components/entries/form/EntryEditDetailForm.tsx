@@ -1,5 +1,11 @@
-import type { EntryDetailType } from "../../../lib/types/entries";
+import { entryDetailSchema } from "@/lib/validation";
+import type {
+  EntryDetailType,
+  ValidationError,
+} from "../../../lib/types/entries";
 import { useState } from "react";
+import { z } from "zod";
+
 interface EntryEditFormProps {
   entry: EntryDetailType;
   onClose: () => void;
@@ -10,20 +16,58 @@ export default function EntryEditDetailForm({
   onClose,
 }: EntryEditFormProps) {
   const [formData, setFormData] = useState(entry);
+  const [errors, setErrors] = useState<ValidationError>({});
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value, type, checked } = e.target as HTMLInputElement; // Cast esplicito per HTMLInputElement
+    const { name, value, type, checked } = e.target as HTMLInputElement;
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value, // Gestione della checkbox e del testo
     }));
   };
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Logica di invio del modulo
+    const entryData = {
+      user: formData.user,
+      country: formData.country,
+      ip: formData.ip,
+      device: formData.device,
+      isDangerous: formData.isDangerous,
+      tags: formData.tags,
+    };
+
+    try {
+      // Validate the data
+      const validatedData = entryDetailSchema.parse(entryData);
+
+      const response = await fetch(`/api/entrydetail/${entry.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": "1234567890",
+        },
+        body: JSON.stringify(validatedData),
+      });
+
+      if (response.ok) {
+        alert("Entry updated successfully!");
+        setErrors({});
+        onClose();
+      } else {
+        alert("Failed to update entry");
+        console.error("Failed to update entry:", response.status);
+      }
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const fieldErrors = error.flatten().fieldErrors as ValidationError;
+        setErrors(fieldErrors);
+      } else {
+        console.error("Error saving new entry:", error);
+      }
+    }
   };
 
   return (
