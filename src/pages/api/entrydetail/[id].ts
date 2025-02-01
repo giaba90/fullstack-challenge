@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import prisma from "@/prisma/client";
+import { prisma } from "@/prisma/client";
 import { handleError, validateId, validateApiKey } from "@/lib/helper";
 import { entryDetailSchema } from "@/lib/validation";
 
@@ -50,7 +50,9 @@ export async function getEntryDetail(
       },
     });
     if (!entryDetail) {
-      return res.status(404).json({ error: "EntryDetail not found" });
+      return res
+        .status(404)
+        .json({ status: 404, error: "EntryDetail not found" });
     }
     res.status(200).json(entryDetail);
   } catch (error) {

@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { EntryTable } from "./entries/EntryTable";
-import { Entry } from "@/state/types/entries";
+import { Entry } from "@/lib/types/entries";
 import { EntryNewForm } from "./entries/form/EntryNewForm";
 
 export default function MainContent() {
-
   const [entries, setEntries] = useState<Entry[]>([]);
   const [showNewForm, setShowNewForm] = useState<boolean>(false);
 
@@ -53,5 +52,4 @@ export default function MainContent() {
       )}
     </main>
   );
-};
-
+}
