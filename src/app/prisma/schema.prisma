@@ -12,18 +12,19 @@ model Entry {
   applicationHostname String
   timestamp           DateTime
   type                String
-  details             EntryDetail? @relation(fields: [id], references: [id], onDelete: Cascade)
+  details             EntryDetail? // Rimosso `@relation(fields: [...])`, non serve qui
 }
 
 model EntryDetail {
   id          Int     @id @default(autoincrement())
+  entryId     Int     @unique
   user        String
   country     String
   ip          String
   device      String
   isDangerous Boolean
-  tags        Tag[]
-  Entry       Entry[]
+  entry       Entry   @relation(fields: [entryId], references: [id], onDelete: Cascade) // Definizione corretta della relazione
+  tags        Tag[] // Relazione uno-a-molti con Tag
 }
 
 model Tag {
@@ -32,5 +33,5 @@ model Tag {
   description   String
   color         String
   entryDetailId Int
-  entryDetail   EntryDetail @relation(fields: [entryDetailId], references: [id])
+  entryDetail   EntryDetail @relation(fields: [entryDetailId], references: [id], onDelete: Cascade)
 }
