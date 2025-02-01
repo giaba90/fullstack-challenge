@@ -47,7 +47,9 @@ export function EntryNewForm({
       ip: formData.get("ip"),
       device: formData.get("device"),
       isDangerous: formData.get("isDangerous") === "on",
-      tags: formData.getAll("tags").map((tag) => ({ title: tag })),
+      tags: formData.get("tags")
+        ? JSON.parse(formData.get("tags") as string) // Convert json into array object
+        : [],
     };
 
     try {
@@ -116,7 +118,7 @@ export function EntryNewForm({
               label="Is Dangerous?"
               errors={errors}
             />
-            {/* <TagInput name="tags" label="Tags" errors={errors} />*/}
+            <TagInput name="tags" label="Tags" errors={errors} />
             <div className="flex justify-between mt-6">
               <button
                 type="button"
