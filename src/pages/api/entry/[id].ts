@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import prisma from "@/prisma/client";
+import { prisma } from "@/prisma/client";
 import { validateId, handleError, validateApiKey } from "@/lib/helper";
 import { entrySchema } from "@/lib/validation";
 

@@ -8,27 +8,30 @@ datasource db {
 }
 
 model Entry {
-  id                  Int      @id @default(autoincrement())
+  id                  Int          @id @default(autoincrement())
   applicationHostname String
   timestamp           DateTime
   type                String
+  details             EntryDetail? 
 }
 
 model EntryDetail {
   id          Int     @id @default(autoincrement())
+  entryId     Int     @unique
   user        String
   country     String
   ip          String
   device      String
   isDangerous Boolean
-  tags        Tag[]
+  entry       Entry   @relation(fields: [entryId], references: [id], onDelete: Cascade) 
+  tags        Tag[] 
 }
 
 model Tag {
-  id          Int         @id @default(autoincrement())
-  title       String
-  description String
-  color       String
-  entryId     Int
-  entryDetail EntryDetail @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  id            Int         @id @default(autoincrement())
+  title         String
+  description   String
+  color         String
+  entryDetailId Int
+  entryDetail   EntryDetail @relation(fields: [entryDetailId], references: [id], onDelete: Cascade)
 }

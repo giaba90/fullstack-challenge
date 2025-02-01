@@ -1,18 +1,19 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import prisma from "@/prisma/client";
-import { entrySchema } from "@/lib/validation";
+import { prisma } from "@/prisma/client";
+import { entryPostSchema } from "@/lib/validation";
 import { handleError, validateApiKey } from "@/lib/helper";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method === "GET") {
-    return getEntries(req, res);
-  } else if (req.method === "POST") {
-    return createEntry(req, res);
-  } else {
-    res.status(405).json({ error: "Method not allowed" });
+  switch (req.method) {
+    case "GET":
+      return getEntries(req, res);
+    case "POST":
+      return createEntry(req, res);
+    default:
+      res.status(405).json({ error: "Method not allowed" });
   }
 }
 
@@ -31,29 +32,68 @@ export async function getEntries(req: NextApiRequest, res: NextApiResponse) {
     handleError({ res, error, message: "Error fetching entries" });
   }
 }
+
 // POST /api/entry
 export async function createEntry(req: NextApiRequest, res: NextApiResponse) {
-  // Validazione API key
-  validateApiKey(req.headers);
-  if (!validateApiKey(req.headers).success) {
-    return res.status(401).json({ error: validateApiKey(req.headers).error });
+  const apiKeyValidation = validateApiKey(req.headers);
+  if (!apiKeyValidation.success) {
+    return res.status(401).json({ error: apiKeyValidation.error });
+  }
+  // Validation data
+  const result = entryPostSchema.safeParse(req.body);
+  if (!result.success) {
+    return res.status(400).json({ error: result.error.errors });
   }
 
   try {
-    // Validation
-    const result = entrySchema.safeParse(req.body);
-    if (!result.success) {
-      return res.status(400).json({ error: result.error.errors });
-    }
+    const {
+      applicationHostname,
+      type,
+      user,
+      country,
+      ip,
+      device,
+      isDangerous,
+      tags,
+    } = result.data;
 
-    const { applicationHostname, type } = result.data;
     const entry = await prisma.entry.create({
       data: {
         applicationHostname,
         timestamp: new Date(),
         type,
+        details: {
+          create: {
+            user,
+            country,
+            ip,
+            device,
+            isDangerous,
+            tags: {
+              create: tags?.map(
+                (tag: {
+                  title: string;
+                  description: string;
+                  color: string;
+                }) => ({
+                  title: tag.title,
+                  description: tag.description,
+                  color: tag.color,
+                })
+              ),
+            },
+          },
+        },
+      },
+      include: {
+        details: {
+          include: {
+            tags: true,
+          },
+        },
       },
     });
+
     res.status(201).json(entry);
   } catch (error) {
     handleError({ res, error, message: "Error creating entry" });
