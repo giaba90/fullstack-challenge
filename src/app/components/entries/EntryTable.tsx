@@ -18,8 +18,7 @@ export function EntryTable({ entries, fetchEntries }: EntryTableProps) {
   );
 
   const onSelect = async (value: Number) => {
-    // const val = await fetch(`/api/entrydetail/${value}`, {
-    const val = await fetch(`/api/entrydetail/1`, {
+    const val = await fetch(`/api/entrydetail/${value}`, {
       headers: {
         "Content-Type": "application/json",
         "x-api-key": "1234567890",
@@ -27,7 +26,6 @@ export function EntryTable({ entries, fetchEntries }: EntryTableProps) {
     });
     const data = await val.json();
     setSelectedEntry(data);
-    //setSelectedEntry(val);
     setShowEntryDetail(true);
   };
 

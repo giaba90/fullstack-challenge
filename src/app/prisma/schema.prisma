@@ -12,7 +12,7 @@ model Entry {
   applicationHostname String
   timestamp           DateTime
   type                String
-  details             EntryDetail? // Rimosso `@relation(fields: [...])`, non serve qui
+  details             EntryDetail? 
 }
 
 model EntryDetail {
@@ -23,8 +23,8 @@ model EntryDetail {
   ip          String
   device      String
   isDangerous Boolean
-  entry       Entry   @relation(fields: [entryId], references: [id], onDelete: Cascade) // Definizione corretta della relazione
-  tags        Tag[] // Relazione uno-a-molti con Tag
+  entry       Entry   @relation(fields: [entryId], references: [id], onDelete: Cascade) 
+  tags        Tag[] 
 }
 
 model Tag {

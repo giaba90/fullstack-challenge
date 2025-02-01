@@ -40,17 +40,51 @@ export async function createEntry(req: NextApiRequest, res: NextApiResponse) {
   }
 
   try {
+    /*
     const result = entrySchema.safeParse(req.body);
     if (!result.success) {
       return res.status(400).json({ error: result.error.errors });
-    }
+    }*/
 
-    const { applicationHostname, type } = result.data;
+    const {
+      applicationHostname,
+      type,
+      user,
+      country,
+      ip,
+      device,
+      isDangerous,
+      tags,
+    } = req.body;
+
     const entry = await prisma.entry.create({
       data: {
         applicationHostname,
         timestamp: new Date(),
         type,
+        details: {
+          create: {
+            user,
+            country,
+            ip,
+            device,
+            isDangerous,
+            tags: {
+              create: tags?.map((tag: any) => ({
+                title: tag.title,
+                description: tag.description,
+                color: tag.color,
+              })),
+            },
+          },
+        },
+      },
+      include: {
+        details: {
+          include: {
+            tags: true, // Inclusione dei tag associati
+          },
+        },
       },
     });
 
