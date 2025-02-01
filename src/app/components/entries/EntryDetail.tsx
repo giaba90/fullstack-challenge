@@ -1,6 +1,7 @@
 import { EntryDetailType } from "@/lib/types/entries";
-import { TrashIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import React from "react";
+import { PencilIcon, TrashIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import React, { useState } from "react";
+import EntryEditDetailForm from "./form/EntryEditDetailForm";
 
 interface EntryDetailProps {
   entry: EntryDetailType;
@@ -13,6 +14,11 @@ export function EntryDetail({
   onClose,
   fetchEntries,
 }: EntryDetailProps) {
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [editingEntry, setEditingEntry] = useState<EntryDetailType | null>(
+    null
+  );
+
   const onDelete = async (value: number) => {
     const id = value.toString();
     try {
@@ -35,6 +41,19 @@ export function EntryDetail({
       console.error("Error deleting entry:", error);
     }
   };
+
+  const onEdit = (value: EntryDetailType) => {
+    setShowEditForm(true);
+    setEditingEntry(value);
+  };
+  if (showEditForm && editingEntry) {
+    return (
+      <EntryEditDetailForm
+        entry={entry}
+        onClose={() => setShowEditForm(false)}
+      />
+    );
+  }
 
   return (
     <div className="space-y-6 shadow sm:rounded-lg p-6 border border-gray-200">
@@ -84,6 +103,15 @@ export function EntryDetail({
         </p>
       </div>
       <div className="text-right">
+        <button
+          className="text-indigo-600 hover:text-indigo-900 mr-2"
+          onClick={(e) => {
+            e.stopPropagation();
+            onEdit(entry);
+          }}
+        >
+          <PencilIcon className="h-5 w-5" />
+        </button>
         <button
           className="text-red-600 hover:text-red-900"
           onClick={(e) => {
