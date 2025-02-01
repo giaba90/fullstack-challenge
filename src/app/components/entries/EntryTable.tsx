@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { Entry, EntryDetailType } from "../../lib/types/entries";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { EntryEditForm } from "./form/EntryEditForm";
-import EntryDetail from "./EntryDetail";
+import { EntryDetail } from "@/components/entries/EntryDetail";
 
 interface EntryTableProps {
   entries: Entry[];
@@ -25,8 +25,12 @@ export function EntryTable({ entries, fetchEntries }: EntryTableProps) {
       },
     });
     const data = await val.json();
-    setSelectedEntry(data);
-    setShowEntryDetail(true);
+    if (data.status == 404) {
+      alert("Entry detail not found");
+    } else {
+      setSelectedEntry(data);
+      setShowEntryDetail(true);
+    }
   };
 
   const onEdit = (value: Entry) => {
@@ -136,6 +140,7 @@ export function EntryTable({ entries, fetchEntries }: EntryTableProps) {
         <EntryDetail
           entry={selectedEntry}
           onClose={() => setShowEntryDetail(false)}
+          fetchEntries={fetchEntries}
         />
       )}
     </>

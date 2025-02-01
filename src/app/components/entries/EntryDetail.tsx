@@ -26,6 +26,7 @@ export function EntryDetail({
       if (response.ok) {
         alert("Entry detail eliminated");
         fetchEntries();
+        onClose();
       } else {
         alert("Failed to delete entry detail");
         console.error("Failed to delete entry detail:", response.status);
