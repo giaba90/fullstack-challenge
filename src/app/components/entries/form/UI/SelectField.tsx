@@ -1,4 +1,4 @@
-import { EntrySelectFieldProps } from "./EntryNewForm";
+import { EntrySelectFieldProps } from "../EntryNewForm";
 
 export function SelectField({
   name,

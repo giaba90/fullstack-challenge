@@ -1,4 +1,4 @@
-import { EntryInputFieldProps } from "./EntryNewForm";
+import { EntryInputFieldProps } from "../EntryNewForm";
 
 export function CheckboxField({ name, label, errors }: EntryInputFieldProps) {
   return (
