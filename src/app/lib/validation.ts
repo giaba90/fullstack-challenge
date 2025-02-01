@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+const idSchema = z.number().int().positive();
+
 const entryDetailSchema = z.object({
   user: z.string().nonempty("The user field is required"),
   country: z.string().nonempty("The country field is required"),
@@ -24,6 +26,6 @@ const entrySchema = z.object({
   type: z.string().nonempty("The type field is required"),
 });
 
-const idSchema = z.number().int().positive();
+const entryPostSchema = entrySchema.merge(entryDetailSchema);
 
-export { entrySchema, entryDetailSchema, idSchema };
+export { entrySchema, entryDetailSchema, entryPostSchema, idSchema };
