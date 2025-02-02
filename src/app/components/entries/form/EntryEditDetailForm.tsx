@@ -1,4 +1,4 @@
-import { entryDetailSchema } from "@/lib/validation";
+import { entryDetailSchema } from "../../../lib/validation";
 import type {
   EntryDetailType,
   ValidationError,

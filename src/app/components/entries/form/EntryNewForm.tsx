@@ -1,9 +1,9 @@
-import { ENTRY_TYPES, ValidationError } from "@/lib/types/entries";
+import { ENTRY_TYPES, ValidationError } from "../../../lib/types/entries";
 import { z } from "zod";
 import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { entryPostSchema } from "@/lib/validation";
+import { entryPostSchema } from "../../../lib/validation";
 import { TagInput } from "./UI/TagInput";
 import { CheckboxField } from "./UI/CheckboxField";
 import { SelectField } from "./UI/SelectField";
