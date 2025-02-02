@@ -24,7 +24,7 @@ export default function EntryEditDetailForm({
     const { name, value, type, checked } = e.target as HTMLInputElement;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value, // Gestione della checkbox e del testo
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 

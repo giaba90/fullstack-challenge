@@ -23,7 +23,7 @@ export default function MainContent() {
   };
 
   useEffect(() => {
-    fetchEntries(); // Eseguito solo al mount
+    fetchEntries();
   }, []);
 
   return (
