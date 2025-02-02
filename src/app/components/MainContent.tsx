@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { EntryTable } from "./entries/EntryTable";
 import { Entry } from "@/lib/types/entries";

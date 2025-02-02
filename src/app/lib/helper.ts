@@ -23,7 +23,7 @@ function validateId({ id }: { id: number }) {
 }
 
 // Helper function for API key validation
-function validateApiKey(headers: NextApiRequest["headers"]) {
+export default function validateApiKey(headers: NextApiRequest["headers"]) {
   const apiKey = headers["x-api-key"];
   if (apiKey !== process.env.NEXT_PUBLIC_API_KEY) {
     return { success: false, error: "Invalid API KEY" };
@@ -31,4 +31,4 @@ function validateApiKey(headers: NextApiRequest["headers"]) {
   return { success: true };
 }
 
-export { handleError, validateId, validateApiKey };
+export { handleError, validateId };

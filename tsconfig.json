@@ -1,21 +1,21 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
+    "module": "ESNext", // Usa ESNext per supportare i moduli ES6
+    "target": "ESNext",
+    "jsx": "react-jsx",
     "lib": [
       "dom",
       "dom.iterable",
-      "esnext"
+      "ESNext"
     ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
-    "module": "esnext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
     "incremental": true,
     "plugins": [
       {
@@ -34,7 +34,9 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/app/seed/seed.ts",
-    "src/pages/api/entrydetail"
+    "src/pages/api/entrydetail",
+    "src/pages/api/--entry.test.ts--",
+    "src/pages/api/entry.test.ts__"
   ],
   "exclude": [
     "node_modules"
