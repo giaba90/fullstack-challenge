@@ -26,7 +26,7 @@ it("should handle empty entries", async () => {
 it("should open the EntryNewForm when 'New Entry' button is clicked", async () => {
   render(<MainContent />);
 
-  const newEntryButton = screen.getByText("New Entry");
+  const newEntryButton = screen.getByText("Add New Entry");
   expect(newEntryButton).toBeInTheDocument();
 
   await userEvent.click(newEntryButton);
@@ -37,12 +37,12 @@ it("should open the EntryNewForm when 'New Entry' button is clicked", async () =
 it("should close the EntryNewForm when onClose is triggered", async () => {
   render(<MainContent />);
 
-  const newEntryButton = screen.getByText("New Entry");
+  const newEntryButton = screen.getByText("Add New Entry");
   await userEvent.click(newEntryButton);
 
   expect(screen.getByText("New Entry")).toBeInTheDocument();
 
-  const closeButton = screen.getByRole("button", { name: /close/i });
+  const closeButton = screen.getByRole("button", { name: /cancel/i });
   await userEvent.click(closeButton);
 
   await waitFor(() => {
@@ -88,8 +88,8 @@ it("should pass correct props to EntryTable component", async () => {
   await waitFor(() => {
     const entryTable = screen.getByRole("table");
     expect(entryTable).toBeInTheDocument();
-    expect(entryTable).toHaveTextContent("Entry 1");
-    expect(entryTable).toHaveTextContent("Entry 2");
+    expect(entryTable).toHaveTextContent("Hostname");
+    expect(entryTable).toHaveTextContent("ID");
   });
 });
 
