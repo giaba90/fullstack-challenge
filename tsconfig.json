@@ -2,7 +2,7 @@
   "compilerOptions": {
     "module": "ESNext", // Usa ESNext per supportare i moduli ES6
     "target": "ESNext",
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "lib": [
       "dom",
       "dom.iterable",
