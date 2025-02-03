@@ -2,9 +2,8 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import MainContent from "./MainContent";
 
-// Mock della funzione fetch per simulare le richieste API
 beforeEach(() => {
-  jest.clearAllMocks(); // Resetta i mock prima di ogni test
+  jest.clearAllMocks(); // reset mocks before each test
 });
 
 it("should handle empty entries", async () => {
@@ -61,8 +60,6 @@ it("should display loading state while fetching entries", async () => {
 
   render(<MainContent />);
 
-  // expect(screen.getByText("Loading...")).toBeInTheDocument();
-
   await waitFor(() => {
     expect(screen.queryByText("Loading...")).not.toBeInTheDocument();
     expect(screen.getByText("No entries")).toBeInTheDocument();
@@ -87,7 +84,6 @@ it("should pass correct props to EntryTable component", async () => {
 
   await waitFor(() => {
     const entryTable = screen.getByRole("table");
-    expect(entryTable).toBeInTheDocument();
     expect(entryTable).toHaveTextContent("Hostname");
     expect(entryTable).toHaveTextContent("ID");
   });

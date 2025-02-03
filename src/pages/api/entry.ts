@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../app/prisma/client";
 import { entryPostSchema } from "../../app/lib/validation";
-import validateApiKey, { handleError } from "../../app/lib/helper";
+import { validateApiKey, handleError } from "../../app/lib/helper";
 
 export default async function handler(
   req: NextApiRequest,
