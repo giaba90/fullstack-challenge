@@ -35,6 +35,19 @@ npm run dev
 
 Visit the url http:\\\localhost:3000
 
+TROUBLE: if you have a problem with prisma client , follow the istruct command
+```
+cd src/app/prisma
+```
+run
+```
+npx prisma generate
+```
+after into root folder
+```
+npm run dev 
+```
+
 EXTRA: If you want the Database dashboard panel, follow the instructions below
 
 Open a new window of your favorite terminal and type
