@@ -53,9 +53,7 @@ export const MainContentProvider = ({ children }: { children: ReactNode }) => {
 export const useMainContent = () => {
   const context = useContext(MainContentContext);
   if (!context) {
-    throw new Error(
-      "useMainContent deve essere usato all'interno di MainContentProvider"
-    );
+    throw new Error("useMainContent must be used inside MainContentProvider");
   }
   return context;
 };
