@@ -8,12 +8,7 @@ import { TagInput } from "./UI/TagInput";
 import { CheckboxField } from "./UI/CheckboxField";
 import { SelectField } from "./UI/SelectField";
 import { InputField } from "./UI/InputField";
-
-interface EntryNewFormProps {
-  isOpen: boolean;
-  onClose: () => void;
-  fetchEntries: () => void;
-}
+import { useMainContent } from "@/context/MainContentContext";
 
 export interface EntryInputFieldProps {
   name: string;
@@ -28,11 +23,8 @@ export interface EntrySelectFieldProps {
   errors: Record<string, string[] | undefined>;
 }
 
-export function EntryNewForm({
-  isOpen,
-  onClose,
-  fetchEntries,
-}: EntryNewFormProps) {
+export function EntryNewForm() {
+  const { isOpen, onClose, fetchEntries } = useMainContent();
   const [errors, setErrors] = useState<ValidationError>({});
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

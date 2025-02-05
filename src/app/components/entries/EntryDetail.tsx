@@ -2,6 +2,7 @@ import { EntryDetailType } from "@/lib/types/entries";
 import { PencilIcon, TrashIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import React, { useState } from "react";
 import EntryEditDetailForm from "./form/EntryEditDetailForm";
+import { useMainContent } from "@/context/MainContentContext";
 
 interface EntryDetailProps {
   entry: EntryDetailType;
@@ -14,13 +15,12 @@ export function EntryDetail({
   entry,
   onClose,
   setShowEntryDetail,
-  fetchEntries,
 }: EntryDetailProps) {
   const [showEditForm, setShowEditForm] = useState(false);
   const [editingEntry, setEditingEntry] = useState<EntryDetailType | null>(
     null
   );
-
+  const { fetchEntries } = useMainContent();
   const onDelete = async (value: number) => {
     const id = value.toString();
     try {

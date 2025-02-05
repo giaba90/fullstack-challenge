@@ -3,13 +3,10 @@ import type { Entry, EntryDetailType } from "../../lib/types/entries";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { EntryEditForm } from "./form/EntryEditForm";
 import { EntryDetail } from "@/components/entries/EntryDetail";
+import { useMainContent } from "@/context/MainContentContext";
 
-interface EntryTableProps {
-  entries: Entry[];
-  fetchEntries: () => void;
-}
-
-export function EntryTable({ entries, fetchEntries }: EntryTableProps) {
+export function EntryTable() {
+  const { fetchEntries, entries } = useMainContent();
   const [showEditForm, setShowEditForm] = useState(false);
   const [showEntryDetail, setShowEntryDetail] = useState(false);
   const [editingEntry, setEditingEntry] = useState<Entry | null>(null);
